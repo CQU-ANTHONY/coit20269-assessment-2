@@ -4,10 +4,12 @@ export default defineConfig({
     test: {
         environment: 'node',
         include: ['test/**/*.test.js'],
-        // Tests must not read real .env secrets — env.js requires these,
-        // so we provide safe placeholders before any module loads.
+        // JWT_SECRET is a fixed test value — never reads real secrets.
+        // MONGODB_URI: integration tests need a real MongoDB. Uses the
+        // host env if set (CI), else local Docker mongo. Start it with:
+        //   docker run -d --rm -p 27017:27017 mongo:7
         env: {
-            MONGODB_URI: 'mongodb://placeholder:27017/test',
+            MONGODB_URI: process.env.MONGODB_URI || 'mongodb://localhost:27017/studyswap-test',
             JWT_SECRET: 'test-secret',
             PORT: '0',
         },
