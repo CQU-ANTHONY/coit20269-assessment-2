@@ -3,6 +3,10 @@ name: CI
 # Run the full quality gate on every PR and every push to dev/main.
 # PRs: validates the branch before merge.
 # Pushes to dev/main: catches regressions on the integration/stable lines.
+#
+# Order: check (fmt) -> lint -> build -> test.
+# Format check first — cheapest, most mechanical signal; then lint;
+# then a build/boot smoke check; then the test suite.
 
 on:
   push:
@@ -12,7 +16,7 @@ on:
 
 jobs:
   server:
-    name: Lint, format check & test (server)
+    name: Check, lint, build & test (server)
     runs-on: ubuntu-latest
 
     # Integration tests need a real MongoDB. This service container matches
@@ -33,9 +37,9 @@ jobs:
         working-directory: server
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
@@ -44,11 +48,36 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Format check (oxfmt)
+        run: npm run fmt:check
+
       - name: Lint (oxlint)
         run: npm run lint
 
-      - name: Format check (oxfmt)
-        run: npm run fmt:check
+      # Build = the app must boot and serve a request. There is no compile
+      # step (JS only), so we smoke-test startup over HTTPS with dev certs.
+      - name: Build (boot & HTTPS smoke check)
+        run: |
+          npm run generate-cert
+          cp .env.example .env
+          # Point MONGODB_URI at the CI mongo service container (same one the
+          # tests use) and enable the HTTPS cert paths — never Atlas, never secrets.
+          sed -i 's|^MONGODB_URI=.*|MONGODB_URI=mongodb://localhost:27017/studyswap-ci|' .env
+          sed -i 's|^# HTTPS_KEY_PATH=|HTTPS_KEY_PATH=|' .env
+          sed -i 's|^# HTTPS_CERT_PATH=|HTTPS_CERT_PATH=|' .env
+          node src/index.js &
+          SERVER_PID=$!
+          for i in $(seq 1 20); do
+            if curl -skf https://localhost:3000/api/health > /dev/null 2>&1; then
+              echo "HTTPS health check passed"
+              kill $SERVER_PID
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server failed to boot/serve over HTTPS"
+          kill $SERVER_PID 2>/dev/null
+          exit 1
 
       - name: Test (vitest)
         env:
