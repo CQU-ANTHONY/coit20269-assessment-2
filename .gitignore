@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Certificates (self-signed dev certs)
+server/certs/*.pem
+server/certs/*.key
+server/certs/*.crt
+
+# Cordova build output
+client/platforms/
+client/plugins/
+client/www/cordova.js
+client/www/cordova_plugins.js
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
