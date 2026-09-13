@@ -1,0 +1,29 @@
+/* StudySwap base styles — structural only.
+   jQuery Mobile theme/styling polish is issue #14 (Linh). */
+
+/* Keep long listing titles from breaking layout */
+.ui-content h2.listing-title {
+    white-space: normal;
+    margin: 0.2em 0;
+}
+
+/* Toast popup text */
+#toast-popup {
+    max-width: 90%;
+    text-align: center;
+}
+
+/* Compact price badge on listing cards */
+.price-badge {
+    float: right;
+    font-weight: bold;
+}
+
+/* Sold state */
+.sold-badge {
+    color: #fff;
+    background-color: #777;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
