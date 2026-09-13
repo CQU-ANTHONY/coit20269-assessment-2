@@ -9,8 +9,8 @@ router.get("/health", (req, res) => {
   res.json({ data: { status: "ok", uptime: process.uptime() } });
 });
 
-// Resource routers are mounted here as they are built:
-//   router.use('/users', require('./user-router'));
-//   router.use('/listings', require('./listing-router'));
+// Resource routers
+router.use("/users", require("./user-router"));
+router.use("/listings", require("./listing-router"));
 
 module.exports = router;
