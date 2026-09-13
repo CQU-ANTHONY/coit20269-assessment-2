@@ -10,7 +10,7 @@ router.get("/health", (req, res) => {
 });
 
 // Resource routers
-router.use('/users', require('./user-router'));
+router.use("/users", require("./user-router"));
 //   router.use('/listings', require('./listing-router'));
 
 module.exports = router;
