@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import request from "supertest";
 import jwt from "jsonwebtoken";
 import express from "express";
@@ -8,6 +8,8 @@ process.env.NODE_ENV = "test";
 
 const { default: authenticate } = await import("../src/middleware/authenticate.js");
 const { notFound, errorHandler } = await import("../src/middleware/error-handler.js");
+const { connectDb, disconnectDb } = await import("../src/config/db.js");
+const { default: User } = await import("../src/models/user-model.js");
 
 // Probe app: same middleware stack as app.js, with the auth middleware
 // mounted on a test route so we can exercise it through real HTTP
@@ -29,6 +31,22 @@ describe("authenticate middleware", () => {
   const secret = process.env.JWT_SECRET;
 
   const sign = (payload) => jwt.sign(payload, secret, { expiresIn: "1h" });
+
+  let dbUser;
+  beforeAll(async () => {
+    await connectDb();
+    // The jwt strategy loads the user from the DB — use a real user.
+    dbUser = await User.create({
+      name: "Probe User",
+      email: "probe@test.cqu",
+      passwordHash: "x", // never compared here
+    });
+  });
+
+  afterAll(async () => {
+    await User.deleteOne({ _id: dbUser?._id });
+    await disconnectDb();
+  });
 
   it("401 when no Authorization header is sent", async () => {
     const res = await request(app).get("/probe/whoami");
@@ -66,14 +84,12 @@ describe("authenticate middleware", () => {
     expect(res.body.error.message).toBe("Invalid or expired token");
   });
 
-  it("populates req.user and returns 200 for a valid token", async () => {
-    const token = sign({ sub: "123", email: "student@cqu.edu.au" });
+  it("populates req.user (full db doc) and returns 200 for a valid token", async () => {
+    const token = sign({ sub: dbUser._id.toString(), email: dbUser.email });
     const res = await request(app).get("/probe/whoami").set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.data.user).toEqual({
-      id: "123",
-      email: "student@cqu.edu.au",
-    });
+    expect(res.body.data.user.email).toBe("probe@test.cqu");
+    expect(res.body.data.user.passwordHash).toBeUndefined(); // strategy strips the hash
   });
 });

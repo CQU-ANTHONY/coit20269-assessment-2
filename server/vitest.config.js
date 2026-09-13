@@ -13,5 +13,9 @@ export default defineConfig({
             JWT_SECRET: 'test-secret',
             PORT: '0',
         },
+        // Each test file runs sequentially — suites share one MongoDB and
+        // parallel workers were clobbering each other's fixtures (flaky
+        // 401s from mid-run user deletion). Sequence is still fast (~4s).
+        fileParallelism: false,
     },
 });

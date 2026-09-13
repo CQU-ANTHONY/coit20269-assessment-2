@@ -1,16 +1,14 @@
 "use strict";
 
 const express = require("express");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const passport = require("../config/passport");
 
 const User = require("../models/user-model");
-const authenticate = require("../middleware/authenticate");
 const { jwtSecret } = require("../config/env");
 
 const router = express.Router();
 
-const SALT_ROUNDS = 10;
 const TOKEN_TTL = "7d";
 
 function signToken(user) {
@@ -45,7 +43,7 @@ router.post("/signup", async (req, res, next) => {
       });
     }
 
-    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const passwordHash = await User.hashPassword(password);
     const user = await User.create({ name, email, passwordHash, campus });
 
     return res.status(201).json({
@@ -66,44 +64,43 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-// POST /api/users/login
-router.post("/login", async (req, res, next) => {
-  try {
-    const { email, password } = req.body || {};
+// POST /api/users/login — credentials checked by the passport-local strategy.
+// Custom callback so failures keep our JSON error shape (Passport's default
+// 401 body is HTML-ish and would break the client contract).
+router.post("/login", (req, res, next) => {
+  const { email, password } = req.body || {};
 
-    if (!email || !password) {
-      return res.status(400).json({
-        error: { message: "Email and password are required", status: 400 },
-      });
-    }
+  if (!email || !password) {
+    return res.status(400).json({
+      error: { message: "Email and password are required", status: 400 },
+    });
+  }
 
-    const user = await User.findOne({ email: String(email).toLowerCase() });
-    // Same message for both cases — never reveal whether the email exists.
-    if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+  passport.authenticate("local", { session: false }, (err, user) => {
+    if (err) return next(err);
+    if (!user) {
+      // Same message for both cases — never reveal whether the email exists.
       return res.status(401).json({
         error: { message: "Invalid email or password", status: 401 },
       });
     }
-
     return res.json({
       data: { token: signToken(user), user: publicUser(user) },
     });
-  } catch (err) {
-    return next(err);
-  }
+  })(req, res, next);
 });
 
 // POST /api/users/logout
 // JWTs are stateless — the client discards the token. This endpoint exists so
 // the client flow has a server call (and future token denylisting if needed).
-router.post("/logout", authenticate, (req, res) => {
+router.post("/logout", passport.authenticate("jwt", { session: false }), (req, res) => {
   return res.json({ data: { message: "Logged out", userId: req.user.id } });
 });
 
 // GET /api/users/me — authenticated profile (used by client on app resume)
-router.get("/me", authenticate, async (req, res, next) => {
+router.get("/me", passport.authenticate("jwt", { session: false }), async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(404).json({
         error: { message: "User no longer exists", status: 404 },
