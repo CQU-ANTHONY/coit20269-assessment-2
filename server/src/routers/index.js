@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-const express = require('express');
+const express = require("express");
 
 const router = express.Router();
 
 // Health check — no auth required
-router.get('/health', (req, res) => {
-    res.json({ data: { status: 'ok', uptime: process.uptime() } });
+router.get("/health", (req, res) => {
+  res.json({ data: { status: "ok", uptime: process.uptime() } });
 });
 
 // Resource routers are mounted here as they are built:
