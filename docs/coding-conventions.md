@@ -49,6 +49,15 @@ module.exports = router;
 ### Async error handling
 Wrap `await` in try/catch and `next(err)` — never leave unhandled rejections. Central error handler (`error-handler.js`) turns them into JSON.
 
+### Authentication (Passport)
+Auth goes through Passport strategies defined in `server/src/config/passport.js`:
+
+- **`passport-local`** — email + password check for `/api/users/login`. Called with a custom callback so failures keep our JSON error shape (Passport's default 401 body would break the client contract).
+- **`passport-jwt`** — Bearer token verification. The strategy loads the user from the DB and **strips `passwordHash`** (`.select('-passwordHash')`), so `req.user` is always safe to serialize.
+- Protect a route with `passport.authenticate('jwt', { session: false })` or the `authenticate` wrapper in `middleware/authenticate.js` (which keeps our exact 401 JSON bodies).
+- Tokens are still **signed with `jsonwebtoken`** in the router — Passport verifies, it doesn't sign.
+- Always pass `{ session: false }` — we are stateless (JWT in Authorization header), no sessions.
+
 ### Error response shape (consistent everywhere)
 ```json
 { "error": { "message": "Something went wrong", "status": 400 } }
