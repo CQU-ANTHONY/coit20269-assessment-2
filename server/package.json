@@ -5,8 +5,11 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js",
-    "generate-cert": "node scripts/generate-dev-cert.js"
+    "dev": "nodemon",
+    "generate-cert": "node scripts/generate-dev-cert.js",
+    "lint": "oxlint src scripts",
+    "fmt": "oxfmt --write src scripts",
+    "fmt:check": "oxfmt --check src scripts"
   },
   "engines": {
     "node": ">=18"
@@ -22,6 +25,9 @@
     "mongoose": "^8.4.0"
   },
   "devDependencies": {
+    "nodemon": "^3.1.14",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
     "selfsigned": "^5.5.0"
   }
 }

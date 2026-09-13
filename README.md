@@ -61,12 +61,24 @@ General-purpose marketplaces (Gumtree, Facebook Marketplace) and student sites (
 
 ## Setup
 
-### Server
+### Server (Docker — recommended)
+
+Runs the API with nodemon hot-reload plus a local MongoDB:
+
+```bash
+docker compose up --build     # API on http://localhost:3100, MongoDB on 27017
+docker compose down -v        # stop and wipe the DB volume
+```
+
+`JWT_SECRET` can be overridden via a root `.env` (see `JWT_SECRET` in `docker-compose.yml`); the default is dev-only.
+
+### Server (bare metal)
 
 ```bash
 cd server
 npm install
-npm start
+npm run generate-cert   # one-time: self-signed cert for local HTTPS
+npm run dev             # nodemon hot-reload
 ```
 
 Requires a `.env` file (never committed) with:
@@ -75,6 +87,18 @@ Requires a `.env` file (never committed) with:
 PORT=3000
 MONGODB_URI=<atlas-connection-string>
 JWT_SECRET=<secret>
+# optional for local HTTPS:
+HTTPS_KEY_PATH=certs/dev-key.pem
+HTTPS_CERT_PATH=certs/dev-cert.pem
+```
+
+### Lint & format
+
+```bash
+cd server
+npm run lint        # oxlint
+npm run fmt         # oxfmt (writes fixes)
+npm run fmt:check   # oxfmt (CI-style check)
 ```
 
 ### Client
