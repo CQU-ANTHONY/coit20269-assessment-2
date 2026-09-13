@@ -128,9 +128,15 @@ describe("POST /api/users/logout", () => {
   });
 
   it("200 with a valid token", async () => {
-    const login = await request(app)
+    let login = await request(app)
       .post(LOGIN)
       .send({ email: validUser.email, password: validUser.password });
+    if (!login.body.data) {
+      await request(app).post(SIGNUP).send(validUser);
+      login = await request(app)
+        .post(LOGIN)
+        .send({ email: validUser.email, password: validUser.password });
+    }
 
     const res = await request(app)
       .post(LOGOUT)
@@ -143,9 +149,15 @@ describe("POST /api/users/logout", () => {
 
 describe("GET /api/users/me", () => {
   it("returns the authenticated user profile", async () => {
-    const login = await request(app)
+    let login = await request(app)
       .post(LOGIN)
       .send({ email: validUser.email, password: validUser.password });
+    if (!login.body.data) {
+      await request(app).post(SIGNUP).send(validUser);
+      login = await request(app)
+        .post(LOGIN)
+        .send({ email: validUser.email, password: validUser.password });
+    }
 
     const res = await request(app).get(ME).set("Authorization", `Bearer ${login.body.data.token}`);
 
