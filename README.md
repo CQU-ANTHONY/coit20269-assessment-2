@@ -39,7 +39,7 @@ General-purpose marketplaces (Gumtree, Facebook Marketplace) and student sites (
 ## Tech Stack
 
 - **Client:** jQuery, jQuery Mobile, JavaScript, HTML5, CSS — packaged with Cordova (camera plugin for listing photos)
-- **Server:** Node.js, Express, Mongoose, JWT auth, CORS middleware, HTTPS
+- **Server:** Node.js 24, Express, Passport (local + JWT strategies), Mongoose, JWT auth, CORS middleware, HTTPS
 - **Database:** MongoDB Atlas
 - **Deployment:** Render (server), Cordova/Android (app)
 - **Version control:** GitHub
@@ -60,6 +60,11 @@ General-purpose marketplaces (Gumtree, Facebook Marketplace) and student sites (
 ```
 
 ## Setup
+
+### Requirements
+
+- **Node.js 24** (`>=24 <25` — enforced; `server/.nvmrc` provided, run `nvm use`)
+- **npm only** (>= 11) — do not use yarn or pnpm; `engine-strict` will reject mismatched environments
 
 ### Server (Docker — recommended)
 

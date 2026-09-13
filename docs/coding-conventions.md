@@ -6,7 +6,8 @@ Applies to all code in this repo. JavaScript only — no TypeScript, no build/tr
 
 - **JavaScript only** (ES2021+ features OK: optional chaining, nullish coalescing, etc.)
 - **CommonJS** modules (`require` / `module.exports`) on the server — matches Express/Cordova tooling with zero config
-- Node.js ≥ 18 (Render default)
+- Node.js **24** (enforced: `engines` in package.json + `.nvmrc` + `engine-strict` in `.npmrc`)
+- **npm only** (>= 11) — never yarn or pnpm; lockfile is `package-lock.json`
 
 ## Formatting
 
