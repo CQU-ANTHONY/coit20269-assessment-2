@@ -1,7 +1,8 @@
 # Dev environment: MongoDB + StudySwap API with hot reload.
 # Usage:
-#   docker compose up --build       # start everything
-#   docker compose down -v          # stop and wipe the DB volume
+#   cp .env.example .env      # one-time
+#   docker compose up --build # start everything
+#   docker compose down -v    # stop and wipe the DB volume
 #
 # The API runs over plain HTTP inside the container (dev); use
 # `npm run generate-cert` + HTTPS_KEY_PATH/CERT_PATH for local HTTPS outside Docker.
@@ -11,7 +12,7 @@ services:
     image: mongo:7
     container_name: studyswap-mongodb
     ports:
-      - "27017:27017"
+      - "${MONGO_HOST_PORT:-27017}:27017"
     volumes:
       - mongodb-data:/data/db
     restart: unless-stopped
@@ -26,11 +27,13 @@ services:
       - ./server:/app
       - /app/node_modules
     ports:
-      - "3100:3000"
+      - "${API_HOST_PORT:-3100}:3000"
     environment:
       NODE_ENV: development
       PORT: 3000
       # Inside the compose network the DB hostname is the service name.
+      # This intentionally overrides any MONGODB_URI from server/.env —
+      # in Docker we always talk to the compose mongodb service.
       MONGODB_URI: mongodb://mongodb:27017/studyswap
       JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
     depends_on:
