@@ -23,7 +23,6 @@ let app;
 
 beforeAll(async () => {
   await connectDb();
-  await User.deleteMany({});
   app = createApp();
 });
 
@@ -132,11 +131,6 @@ describe("POST /api/users/logout", () => {
     const login = await request(app)
       .post(LOGIN)
       .send({ email: validUser.email, password: validUser.password });
-    // Parallel test workers share the DB; a sibling suite cleanup may have
-    // wiped our user. Re-signup defensively before failing.
-    if (!login.body.data) {
-      await request(app).post(SIGNUP).send(validUser);
-    }
 
     const res = await request(app)
       .post(LOGOUT)
@@ -149,17 +143,9 @@ describe("POST /api/users/logout", () => {
 
 describe("GET /api/users/me", () => {
   it("returns the authenticated user profile", async () => {
-    let login = await request(app)
+    const login = await request(app)
       .post(LOGIN)
       .send({ email: validUser.email, password: validUser.password });
-    // Parallel test workers share the DB; a sibling suite cleanup may have
-    // wiped our user. Re-signup + re-login defensively before failing.
-    if (!login.body.data) {
-      await request(app).post(SIGNUP).send(validUser);
-      login = await request(app)
-        .post(LOGIN)
-        .send({ email: validUser.email, password: validUser.password });
-    }
 
     const res = await request(app).get(ME).set("Authorization", `Bearer ${login.body.data.token}`);
 
