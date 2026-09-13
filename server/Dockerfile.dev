@@ -1,5 +1,5 @@
 # Dev image for the StudySwap API — hot reload via nodemon (command set by compose).
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 

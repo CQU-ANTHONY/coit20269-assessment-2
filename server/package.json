@@ -14,7 +14,8 @@
     "fmt:check": "oxfmt --check src scripts test"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=24 <25",
+    "npm": ">=11"
   },
   "license": "UNLICENSED",
   "private": true,
