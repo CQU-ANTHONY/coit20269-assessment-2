@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+    "generate-cert": "node scripts/generate-dev-cert.js"
   },
   "engines": {
     "node": ">=18"
@@ -19,5 +20,8 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0"
+  },
+  "devDependencies": {
+    "selfsigned": "^5.5.0"
   }
 }
