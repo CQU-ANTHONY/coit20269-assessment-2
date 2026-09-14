@@ -1,5 +1,22 @@
-/* StudySwap base styles — structural only.
-   jQuery Mobile theme/styling polish is issue #14 (Linh). */
+/* StudySwap styles.
+
+   Structural rules below are shared. Theme / aesthetics polish is issue #14:
+   see docs/fe-theme-guide.md on branch feat/14-app-shell-theme.
+
+   Theme checklist for Linh:
+   - [ ] Choose header/button data-theme (or custom swatch)
+   - [ ] Brand colour tokens (--ss-* variables)
+   - [ ] Auth / browse / detail / form spacing polish
+   - [ ] Do not rename frozen page IDs; do not edit js/api.js
+*/
+
+:root {
+  /* Override these in #14 — placeholders only */
+  --ss-brand: #0b6e4f;
+  --ss-brand-ink: #063a2a;
+  --ss-surface: #f6f8f7;
+  --ss-accent: #c45c26;
+}
 
 /* Keep long listing titles from breaking layout */
 .ui-content h2.listing-title {
@@ -76,4 +93,41 @@
 
 .profile-user {
     margin-bottom: 1em;
+}
+
+/* Shared field hint (auth #15 + listing form #17) */
+.field-hint {
+    margin: -0.4em 0 1em;
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Listing form (#17) — structural only; theme polish is #14 */
+.photo-actions {
+    margin: 0.5em 0 1em;
+}
+
+.listing-photo-file {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.listing-photo-preview {
+    display: block;
+    max-width: 100%;
+    max-height: 200px;
+    margin: 0 0 1em;
+    object-fit: contain;
+}
+
+.form-delete-wrap {
+    margin-top: 1.5em;
+    padding-top: 1em;
+    border-top: 1px solid #ddd;
 }
