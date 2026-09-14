@@ -51,6 +51,56 @@
     margin-top: 1.5em;
 }
 
+/* Browse / profile empty states (#16) */
+.empty-state {
+    text-align: center;
+    color: #666;
+    margin: 1.5em 0;
+}
+
+.browse-filters {
+    margin-bottom: 1em;
+}
+
+/* List thumbnails — keep aspect under control in jQM listview */
+.listing-thumb,
+#browse-list img,
+#profile-list img {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+}
+
+.detail-photo {
+    display: block;
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    margin-bottom: 0.75em;
+}
+
+.detail-meta {
+    overflow: hidden;
+}
+
+.detail-description {
+    white-space: pre-wrap;
+}
+
+.detail-seller {
+    margin-top: 1em;
+    padding-top: 0.75em;
+    border-top: 1px solid #ddd;
+}
+
+.owner-actions {
+    margin-top: 1.25em;
+}
+
+.profile-user {
+    margin-bottom: 1em;
+}
+
 /* Shared field hint (auth #15 + listing form #17) */
 .field-hint {
     margin: -0.4em 0 1em;

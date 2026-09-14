@@ -72,17 +72,57 @@
         <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
     </div>
     <div role="main" class="ui-content">
-        <p>Browse page goes here (issue #16).</p>
+        <div class="browse-filters">
+            <label for="browse-category" class="select">Category</label>
+            <select name="category" id="browse-category" data-mini="true">
+                <option value="">All categories</option>
+                <option value="textbooks">Textbooks</option>
+                <option value="furniture">Furniture</option>
+                <option value="electronics">Electronics</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="browse-search">Search</label>
+            <input type="search" name="q" id="browse-search" placeholder="Title or description" data-mini="true">
+
+            <button type="button" id="browse-refresh" class="ui-btn ui-corner-all ui-mini ui-btn-b">Refresh</button>
+        </div>
+
+        <ul id="browse-list" data-role="listview" data-inset="true"></ul>
+        <p id="browse-empty" class="empty-state" hidden>No listings found.</p>
     </div>
 </div>
 
 <!-- ============ DETAIL (#page-detail) — built by feat/16-browse-listings ============ -->
 <div data-role="page" id="page-detail">
     <div data-role="header">
+        <a href="#page-browse" data-icon="carat-l" data-iconpos="notext">Back</a>
         <h1>Listing</h1>
+        <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
     </div>
     <div role="main" class="ui-content">
-        <p>Listing detail goes here (issue #16).</p>
+        <div id="detail-loading" class="empty-state">Loading…</div>
+        <div id="detail-error" class="empty-state" hidden></div>
+        <div id="detail-content" hidden>
+            <img id="detail-photo" class="detail-photo" alt="" hidden>
+            <h2 class="listing-title" id="detail-title"></h2>
+            <p class="detail-meta">
+                <span id="detail-price" class="price-badge"></span>
+                <span id="detail-category"></span>
+                <span id="detail-status" class="sold-badge" hidden>Sold</span>
+            </p>
+            <p id="detail-description" class="detail-description"></p>
+            <div id="detail-seller" class="detail-seller">
+                <h3>Seller</h3>
+                <p id="detail-seller-name"></p>
+                <p id="detail-seller-campus"></p>
+            </div>
+            <div id="detail-owner-actions" class="owner-actions" hidden>
+                <a href="#page-form" id="detail-edit" class="ui-btn ui-corner-all ui-btn-b">Edit</a>
+                <button type="button" id="detail-mark-sold" class="ui-btn ui-corner-all">Mark sold</button>
+                <button type="button" id="detail-delete" class="ui-btn ui-corner-all ui-btn-a">Delete</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -135,9 +175,20 @@
 <div data-role="page" id="page-profile">
     <div data-role="header">
         <h1>Profile</h1>
+        <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
     </div>
     <div role="main" class="ui-content">
-        <p>Profile and my-listings go here (issue #16).</p>
+        <div id="profile-user" class="profile-user">
+            <h2 id="profile-name"></h2>
+            <p id="profile-email"></p>
+            <p id="profile-campus"></p>
+        </div>
+
+        <a href="#page-form" id="profile-new-listing" class="ui-btn ui-corner-all ui-btn-b ui-icon-plus ui-btn-icon-left">New listing</a>
+
+        <h3>My listings</h3>
+        <ul id="profile-list" data-role="listview" data-inset="true"></ul>
+        <p id="profile-empty" class="empty-state" hidden>You have no listings yet.</p>
     </div>
 </div>
 
@@ -165,11 +216,11 @@
 </script>
 <script src="lib/jquery.mobile-1.4.5.min.js"></script>
 <script src="js/api.js"></script>
-<<<<<<< HEAD
 <script src="js/login.js"></script>
 <script src="js/signup.js"></script>
-=======
+<script src="js/browse.js"></script>
+<script src="js/detail.js"></script>
+<script src="js/profile.js"></script>
 <script src="js/form.js"></script>
->>>>>>> origin/dev
 </body>
 </html>
