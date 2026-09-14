@@ -45,6 +45,12 @@
     font-size: 0.8em;
 }
 
+/* Auth forms (#15) — structural only; theme polish is #14 */
+.auth-switch {
+    text-align: center;
+    margin-top: 1.5em;
+}
+
 /* Browse / profile empty states (#16) */
 .empty-state {
     text-align: center;
