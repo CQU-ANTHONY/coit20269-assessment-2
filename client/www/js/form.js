@@ -103,8 +103,11 @@
     clearEditKey();
     resetForm();
     if (listing && listing._id) {
-      // #16 detail page can read this if needed; browse is the safe fallback.
-      sessionStorage.setItem("studyswap_detail_listing_id", listing._id);
+      // Shared with #16 detail.js (studyswap_selected_listing_id).
+      sessionStorage.setItem("studyswap_selected_listing_id", listing._id);
+      if (window.StudySwap) {
+        window.StudySwap.selectedListingId = listing._id;
+      }
       window.location.hash = "#page-detail";
     } else {
       window.location.hash = "#page-browse";
