@@ -1,7 +1,7 @@
 # Issue #14 — jQuery Mobile theme polish (Linh)
 
-Branch: `feat/14-app-shell-theme`  
-Worktree: `.worktrees/feat-14-app-shell-theme`
+Branch: `feat/14-theme-polish`  
+Worktree: `.worktrees/feat-14-theme-polish`
 
 ## Already done (do not redo)
 
@@ -28,12 +28,19 @@ Theme / aesthetics polish only:
 - Prefer CSS + `data-theme` / `data-icon` attributes over rewriting markup owned by #15–#17
 - Pull latest `dev` often — #15/#16/#17 will fill page bodies while you theme
 
+## Theme checklist
+
+- [x] Choose header/button data-theme (or custom swatch) — pages `data-theme="a"`, headers `data-theme="b"` (recolored to brand green)
+- [x] Brand colour tokens (`--ss-*` variables) — green campus brand + warm accent
+- [x] Auth / browse / detail / form spacing polish — filters, empty states, toast, nav, forms
+- [x] Do not rename frozen page IDs; do not edit `js/api.js`
+
 ## How to work
 
 ```bash
-cd .worktrees/feat-14-app-shell-theme
+cd .worktrees/feat-14-theme-polish
 # edit client/www/css/studyswap.css (+ light index.html theme attrs if needed)
-git add -A && git commit -m "feat: jQuery Mobile theme polish (#14)"
+git add -A && git commit -m "feat: StudySwap jQuery Mobile theme polish (#14)"
 git push -u origin HEAD
 # open PR targeting dev, request review from @nauijohn
 ```
