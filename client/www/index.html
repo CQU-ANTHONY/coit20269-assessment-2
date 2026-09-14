@@ -53,10 +53,45 @@
 <!-- ============ FORM (#page-form) — built by feat/17-listing-forms ============ -->
 <div data-role="page" id="page-form">
     <div data-role="header">
-        <h1>New listing</h1>
+        <h1 id="form-page-title">New listing</h1>
+        <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
     </div>
     <div role="main" class="ui-content">
-        <p>Create/edit listing form goes here (issue #17).</p>
+        <form id="form-listing" data-ajax="false">
+            <label for="listing-title">Title</label>
+            <input type="text" name="title" id="listing-title" required maxlength="120" placeholder="e.g. Calculus textbook 9th ed">
+
+            <label for="listing-description">Description</label>
+            <textarea name="description" id="listing-description" rows="4" maxlength="2000" placeholder="Condition, pickup notes, etc."></textarea>
+
+            <label for="listing-price">Price (AUD)</label>
+            <input type="number" name="price" id="listing-price" required min="0" step="0.01" placeholder="0.00">
+
+            <label for="listing-category" class="select">Category</label>
+            <select name="category" id="listing-category" required>
+                <option value="">Select a category</option>
+                <option value="textbooks">Textbooks</option>
+                <option value="furniture">Furniture</option>
+                <option value="electronics">Electronics</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="listing-photo">Photo (URL or base64)</label>
+            <input type="text" name="photo" id="listing-photo" placeholder="https://… or data:image/…">
+            <p class="field-hint">Paste a link or base64 data URL. Camera capture arrives with Cordova (#18).</p>
+
+            <div class="photo-actions">
+                <button type="button" id="listing-photo-camera" class="ui-btn ui-corner-all ui-btn-inline">Take photo</button>
+                <input type="file" id="listing-photo-file" accept="image/*" capture="environment" class="listing-photo-file">
+            </div>
+            <img id="listing-photo-preview" class="listing-photo-preview" alt="Listing photo preview" hidden>
+
+            <button type="submit" id="listing-submit" class="ui-btn ui-corner-all ui-btn-b">Save listing</button>
+        </form>
+
+        <div id="form-delete-wrap" class="form-delete-wrap" hidden>
+            <button type="button" id="listing-delete" class="ui-btn ui-corner-all ui-btn-a">Delete listing</button>
+        </div>
     </div>
 </div>
 
@@ -94,5 +129,6 @@
 </script>
 <script src="lib/jquery.mobile-1.4.5.min.js"></script>
 <script src="js/api.js"></script>
+<script src="js/form.js"></script>
 </body>
 </html>
