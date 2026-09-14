@@ -15,17 +15,53 @@
         <h1>StudySwap</h1>
     </div>
     <div role="main" class="ui-content">
-        <p>Login form goes here (issue #15).</p>
+        <form id="form-login" data-ajax="false">
+            <label for="login-email">Email</label>
+            <input type="email" name="email" id="login-email" required autocomplete="email">
+
+            <label for="login-password">Password</label>
+            <input type="password" name="password" id="login-password" required autocomplete="current-password" minlength="8">
+
+            <button type="submit" id="login-submit" class="ui-btn ui-corner-all ui-btn-b">Log in</button>
+        </form>
+        <p class="auth-switch">
+            New here? <a href="#page-signup">Create an account</a>
+        </p>
     </div>
 </div>
 
 <!-- ============ SIGNUP (#page-signup) — built by feat/15-auth-screens ============ -->
 <div data-role="page" id="page-signup">
     <div data-role="header">
+        <a href="#page-login" data-rel="back" data-icon="carat-l" data-iconpos="notext">Back</a>
         <h1>Create account</h1>
     </div>
     <div role="main" class="ui-content">
-        <p>Sign-up form goes here (issue #15).</p>
+        <form id="form-signup" data-ajax="false">
+            <label for="signup-name">Name</label>
+            <input type="text" name="name" id="signup-name" required autocomplete="name" maxlength="80">
+
+            <label for="signup-email">Email</label>
+            <input type="email" name="email" id="signup-email" required autocomplete="email">
+
+            <label for="signup-password">Password</label>
+            <input type="password" name="password" id="signup-password" required autocomplete="new-password" minlength="8">
+            <p class="field-hint">At least 8 characters.</p>
+
+            <label for="signup-campus" class="select">Campus</label>
+            <select name="campus" id="signup-campus">
+                <option value="other">Other / not listed</option>
+                <option value="BNE">Brisbane (BNE)</option>
+                <option value="SYD">Sydney (SYD)</option>
+                <option value="MEL">Melbourne (MEL)</option>
+                <option value="DST">Distance (DST)</option>
+            </select>
+
+            <button type="submit" id="signup-submit" class="ui-btn ui-corner-all ui-btn-b">Sign up</button>
+        </form>
+        <p class="auth-switch">
+            Already have an account? <a href="#page-login">Log in</a>
+        </p>
     </div>
 </div>
 
@@ -94,5 +130,7 @@
 </script>
 <script src="lib/jquery.mobile-1.4.5.min.js"></script>
 <script src="js/api.js"></script>
+<script src="js/login.js"></script>
+<script src="js/signup.js"></script>
 </body>
 </html>

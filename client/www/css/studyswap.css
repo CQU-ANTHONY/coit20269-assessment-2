@@ -27,3 +27,15 @@
     border-radius: 4px;
     font-size: 0.8em;
 }
+
+/* Auth forms (#15) — structural only; theme polish is #14 */
+.auth-switch {
+    text-align: center;
+    margin-top: 1.5em;
+}
+
+.field-hint {
+    margin: -0.4em 0 1em;
+    font-size: 0.85em;
+    color: #666;
+}
