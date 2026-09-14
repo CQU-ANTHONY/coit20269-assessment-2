@@ -16,6 +16,17 @@
   /** @type {string|null} */
   var editingId = null;
 
+  /** Cordova camera plugin is available after `deviceready`. Browser skips wait. */
+  var deviceReady = !window.cordova;
+
+  document.addEventListener(
+    "deviceready",
+    function () {
+      deviceReady = true;
+    },
+    false,
+  );
+
   function setModeUi(isEdit) {
     $("#form-page-title").text(isEdit ? "Edit listing" : "New listing");
     $("#listing-submit").text(isEdit ? "Save changes" : "Save listing");
@@ -116,6 +127,11 @@
   }
 
   function takePhoto() {
+    if (window.cordova && !deviceReady) {
+      toast("App still starting — try the camera again in a moment");
+      return;
+    }
+
     var Camera = navigator.camera;
     if (Camera && typeof Camera.getPicture === "function") {
       var destType =
@@ -142,12 +158,12 @@
 
     var fileInput = document.getElementById("listing-photo-file");
     if (fileInput && typeof fileInput.click === "function") {
-      toast("Camera comes with Cordova setup (#18). Choose a file for now.");
+      toast("Camera not available here — choose a photo file instead");
       fileInput.click();
       return;
     }
 
-    toast("Camera comes with Cordova setup (#18). Paste a photo URL for now.");
+    toast("Camera not available — paste a photo URL or data URL");
   }
 
   function readFileAsDataUrl(file) {
