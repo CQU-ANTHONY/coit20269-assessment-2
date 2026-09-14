@@ -1,139 +1,480 @@
-/* StudySwap styles.
-
-   Structural rules below are shared. Theme / aesthetics polish is issue #14:
-   see docs/fe-theme-guide.md on branch feat/14-app-shell-theme.
-
-   Theme checklist for Linh:
-   - [ ] Choose header/button data-theme (or custom swatch)
-   - [ ] Brand colour tokens (--ss-* variables)
-   - [ ] Auth / browse / detail / form spacing polish
-   - [ ] Do not rename frozen page IDs; do not edit js/api.js
+/* StudySwap theme — campus marketplace / study vibe (issue #14).
+   Brand: deep green + warm accent. Overrides jQM swatches a/b without
+   renaming frozen page IDs or touching js/api.js.
 */
 
 :root {
-  /* Override these in #14 — placeholders only */
   --ss-brand: #0b6e4f;
+  --ss-brand-mid: #0d835e;
   --ss-brand-ink: #063a2a;
-  --ss-surface: #f6f8f7;
+  --ss-brand-soft: #e4f0eb;
+  --ss-surface: #f3f6f4;
+  --ss-surface-raised: #ffffff;
   --ss-accent: #c45c26;
+  --ss-accent-soft: #f7eee8;
+  --ss-ink: #1c2b24;
+  --ss-muted: #5c6d65;
+  --ss-border: #cfdad4;
+  --ss-danger: #9b3a2a;
+  --ss-danger-ink: #fff8f6;
+  --ss-radius: 0.45em;
+  --ss-shadow: 0 1px 3px rgba(6, 58, 42, 0.08);
+}
+
+/* ---------- Page shell ---------- */
+
+.ui-page {
+  background-color: var(--ss-surface);
+  color: var(--ss-ink);
+}
+
+.ui-content {
+  padding: 1em 1.1em 1.5em;
+}
+
+.ui-page .ui-content a {
+  color: var(--ss-brand);
+  font-weight: 600;
+}
+
+.ui-page .ui-content a:visited {
+  color: var(--ss-brand-ink);
+}
+
+/* ---------- Headers (data-theme="b" → brand green bar) ---------- */
+
+.ui-bar-b,
+.ui-page-theme-a .ui-bar-b,
+.ui-header.ui-bar-b {
+  background-color: var(--ss-brand);
+  background-image: none;
+  border-color: var(--ss-brand-ink);
+  color: #fff;
+  text-shadow: none;
+}
+
+.ui-header.ui-bar-b .ui-title {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0 15%;
+}
+
+.ui-header.ui-bar-b .ui-btn,
+.ui-header.ui-bar-b .ui-btn:hover,
+.ui-header.ui-bar-b .ui-btn:active,
+.ui-header.ui-bar-b .ui-btn:focus {
+  background-color: transparent;
+  background-image: none;
+  border-color: transparent;
+  color: #fff;
+  text-shadow: none;
+}
+
+.ui-header.ui-bar-b .ui-btn-icon-notext {
+  border-radius: 50%;
+}
+
+.ui-header.ui-bar-b .ui-btn-icon-notext:after {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+/* ---------- Primary buttons (ui-btn-b) ---------- */
+
+.ui-btn-b,
+.ui-page-theme-a .ui-btn-b {
+  background-color: var(--ss-brand);
+  background-image: none;
+  border-color: var(--ss-brand-ink);
+  color: #fff;
+  text-shadow: none;
+  font-weight: 600;
+}
+
+.ui-btn-b:hover,
+.ui-btn-b:focus,
+.ui-page-theme-a .ui-btn-b:hover {
+  background-color: var(--ss-brand-mid);
+  background-image: none;
+  border-color: var(--ss-brand-ink);
+  color: #fff;
+}
+
+.ui-btn-b:active,
+.ui-btn-b.ui-btn-active {
+  background-color: var(--ss-brand-ink);
+  background-image: none;
+  border-color: var(--ss-brand-ink);
+  color: #fff;
+}
+
+/* Secondary / default buttons */
+.ui-btn-a,
+.ui-page-theme-a .ui-btn-a {
+  background-color: var(--ss-surface-raised);
+  background-image: none;
+  border-color: var(--ss-border);
+  color: var(--ss-ink);
+  text-shadow: none;
+}
+
+/* Destructive actions keep jQM "a" but read clearly as danger */
+#detail-delete,
+#listing-delete {
+  background-color: var(--ss-danger) !important;
+  background-image: none !important;
+  border-color: #7a2c20 !important;
+  color: var(--ss-danger-ink) !important;
+  text-shadow: none !important;
+}
+
+/* ---------- Form controls ---------- */
+
+.ui-input-text,
+.ui-input-search,
+.ui-select .ui-btn {
+  background-color: var(--ss-surface-raised) !important;
+  background-image: none !important;
+  border-color: var(--ss-border) !important;
+  border-radius: var(--ss-radius) !important;
+  box-shadow: none !important;
+}
+
+.ui-input-text.ui-focus,
+.ui-input-search.ui-focus,
+.ui-select .ui-btn.ui-focus {
+  border-color: var(--ss-brand) !important;
+  box-shadow: 0 0 0 2px rgba(11, 110, 79, 0.18) !important;
+}
+
+.ui-content label {
+  font-weight: 600;
+  color: var(--ss-brand-ink);
+  margin: 0.85em 0 0.35em;
+}
+
+.ui-content label:first-child {
+  margin-top: 0;
+}
+
+.field-hint {
+  margin: -0.25em 0 1em;
+  font-size: 0.85em;
+  color: var(--ss-muted);
+  line-height: 1.35;
+}
+
+/* ---------- Auth pages ---------- */
+
+#page-login .ui-content,
+#page-signup .ui-content {
+  max-width: 26em;
+  margin: 0 auto;
+  padding-top: 1.5em;
+}
+
+#page-login #login-submit,
+#page-signup #signup-submit {
+  margin-top: 1.25em;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.75em;
+  color: var(--ss-muted);
+  font-size: 0.95em;
+}
+
+.auth-switch a {
+  color: var(--ss-brand);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11, 110, 79, 0.35);
+}
+
+/* ---------- Browse / filters ---------- */
+
+.browse-filters {
+  margin-bottom: 1.15em;
+  padding: 0.85em 0.9em 1em;
+  background: var(--ss-surface-raised);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  box-shadow: var(--ss-shadow);
+}
+
+.browse-filters label {
+  margin-top: 0.65em;
+}
+
+.browse-filters label:first-child {
+  margin-top: 0;
+}
+
+.browse-filters #browse-refresh {
+  margin-top: 0.85em;
+}
+
+/* ---------- Listviews ---------- */
+
+.ui-listview > li {
+  border-color: var(--ss-border) !important;
+  background-color: var(--ss-surface-raised) !important;
+}
+
+.ui-listview > .ui-li-static,
+.ui-listview > .ui-li-divider,
+.ui-listview > li > a.ui-btn {
+  background-color: var(--ss-surface-raised) !important;
+  background-image: none !important;
+  border-color: var(--ss-border) !important;
+  color: var(--ss-ink) !important;
+  text-shadow: none !important;
+}
+
+.ui-listview > li > a.ui-btn:hover,
+.ui-listview > li > a.ui-btn:focus {
+  background-color: var(--ss-brand-soft) !important;
+}
+
+.ui-listview-inset {
+  margin: 0.4em 0 1em;
+  box-shadow: var(--ss-shadow);
+}
+
+.ui-li-has-thumb .ui-btn {
+  min-height: 4.4em;
 }
 
 /* Keep long listing titles from breaking layout */
 .ui-content h2.listing-title {
-    white-space: normal;
-    margin: 0.2em 0;
-}
-
-/* Toast popup text */
-#toast-popup {
-    max-width: 90%;
-    text-align: center;
-}
-
-/* Compact price badge on listing cards */
-.price-badge {
-    float: right;
-    font-weight: bold;
-}
-
-/* Sold state */
-.sold-badge {
-    color: #fff;
-    background-color: #777;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
-}
-
-/* Auth forms (#15) — structural only; theme polish is #14 */
-.auth-switch {
-    text-align: center;
-    margin-top: 1.5em;
-}
-
-/* Browse / profile empty states (#16) */
-.empty-state {
-    text-align: center;
-    color: #666;
-    margin: 1.5em 0;
-}
-
-.browse-filters {
-    margin-bottom: 1em;
+  white-space: normal;
+  margin: 0.15em 0 0.4em;
+  color: var(--ss-brand-ink);
+  font-size: 1.35em;
+  line-height: 1.25;
+  font-weight: 700;
 }
 
 /* List thumbnails — keep aspect under control in jQM listview */
 .listing-thumb,
 #browse-list img,
 #profile-list img {
-    max-width: 80px;
-    max-height: 80px;
-    object-fit: cover;
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--ss-brand-soft);
 }
 
+/* Compact price badge on listing cards / detail */
+.price-badge {
+  float: right;
+  font-weight: 700;
+  color: var(--ss-accent);
+  background: var(--ss-accent-soft);
+  padding: 0.15em 0.55em;
+  border-radius: 999px;
+  font-size: 0.95em;
+}
+
+/* Sold state */
+.sold-badge {
+  color: #fff;
+  background-color: var(--ss-muted);
+  padding: 0.15em 0.55em;
+  border-radius: 999px;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-left: 0.35em;
+  vertical-align: middle;
+}
+
+/* ---------- Empty states ---------- */
+
+.empty-state {
+  text-align: center;
+  color: var(--ss-muted);
+  margin: 2em 0.5em;
+  padding: 1.25em 1em;
+  background: var(--ss-brand-soft);
+  border: 1px dashed var(--ss-border);
+  border-radius: var(--ss-radius);
+  font-size: 0.95em;
+  line-height: 1.45;
+}
+
+/* ---------- Detail page ---------- */
+
 .detail-photo {
-    display: block;
-    width: 100%;
-    max-height: 240px;
-    object-fit: cover;
-    margin-bottom: 0.75em;
+  display: block;
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  margin-bottom: 0.9em;
+  border-radius: var(--ss-radius);
+  background: var(--ss-brand-soft);
+  border: 1px solid var(--ss-border);
 }
 
 .detail-meta {
-    overflow: hidden;
+  overflow: hidden;
+  margin: 0 0 0.85em;
+  color: var(--ss-muted);
+  font-size: 0.95em;
+  line-height: 1.6;
 }
 
 .detail-description {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  color: var(--ss-ink);
+  margin: 0 0 1em;
 }
 
 .detail-seller {
-    margin-top: 1em;
-    padding-top: 0.75em;
-    border-top: 1px solid #ddd;
+  margin-top: 1.15em;
+  padding: 0.9em 1em;
+  background: var(--ss-surface-raised);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  box-shadow: var(--ss-shadow);
+}
+
+.detail-seller h3 {
+  margin: 0 0 0.4em;
+  color: var(--ss-brand-ink);
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.detail-seller p {
+  margin: 0.2em 0;
+  color: var(--ss-ink);
 }
 
 .owner-actions {
-    margin-top: 1.25em;
+  margin-top: 1.35em;
 }
+
+.owner-actions .ui-btn {
+  margin-bottom: 0.45em;
+}
+
+/* ---------- Profile ---------- */
 
 .profile-user {
-    margin-bottom: 1em;
+  margin-bottom: 1.15em;
+  padding: 1em 1.05em;
+  background: var(--ss-surface-raised);
+  border: 1px solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  box-shadow: var(--ss-shadow);
 }
 
-/* Shared field hint (auth #15 + listing form #17) */
-.field-hint {
-    margin: -0.4em 0 1em;
-    font-size: 0.85em;
-    color: #666;
+.profile-user h2 {
+  margin: 0 0 0.35em;
+  color: var(--ss-brand-ink);
+  font-size: 1.35em;
 }
 
-/* Listing form (#17) — structural only; theme polish is #14 */
+.profile-user p {
+  margin: 0.2em 0;
+  color: var(--ss-muted);
+  font-size: 0.95em;
+}
+
+#page-profile h3 {
+  margin: 1.25em 0 0.5em;
+  color: var(--ss-brand-ink);
+  font-size: 1.05em;
+}
+
+#profile-new-listing {
+  margin-bottom: 0.25em;
+}
+
+/* ---------- Listing form ---------- */
+
 .photo-actions {
-    margin: 0.5em 0 1em;
+  margin: 0.5em 0 1em;
 }
 
 .listing-photo-file {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .listing-photo-preview {
-    display: block;
-    max-width: 100%;
-    max-height: 200px;
-    margin: 0 0 1em;
-    object-fit: contain;
+  display: block;
+  max-width: 100%;
+  max-height: 200px;
+  margin: 0 0 1em;
+  object-fit: contain;
+  border-radius: var(--ss-radius);
+  border: 1px solid var(--ss-border);
+  background: var(--ss-brand-soft);
 }
 
 .form-delete-wrap {
-    margin-top: 1.5em;
-    padding-top: 1em;
-    border-top: 1px solid #ddd;
+  margin-top: 1.75em;
+  padding-top: 1.15em;
+  border-top: 1px solid var(--ss-border);
+}
+
+#page-form #listing-submit {
+  margin-top: 0.75em;
+}
+
+/* ---------- Nav popup ---------- */
+
+#popup-menu {
+  border-radius: var(--ss-radius);
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(6, 58, 42, 0.2);
+}
+
+#popup-menu .ui-listview {
+  margin: 0;
+}
+
+#popup-menu .ui-listview > li > a.ui-btn {
+  font-weight: 600;
+  color: var(--ss-ink) !important;
+}
+
+#popup-menu .ui-listview > li > a.ui-btn:after {
+  background-color: var(--ss-brand);
+}
+
+#popup-menu #nav-logout {
+  color: var(--ss-danger) !important;
+}
+
+/* ---------- Toast ---------- */
+
+#toast-popup {
+  max-width: 90%;
+  text-align: center;
+  padding: 0.85em 1.25em;
+  background: var(--ss-brand-ink) !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: var(--ss-radius) !important;
+  box-shadow: 0 4px 16px rgba(6, 58, 42, 0.28);
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+#toast-popup #toast-text {
+  margin: 0;
+  font-size: 0.95em;
+  font-weight: 600;
+  line-height: 1.4;
 }
