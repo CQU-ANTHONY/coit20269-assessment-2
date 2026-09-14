@@ -1,5 +1,22 @@
-/* StudySwap base styles — structural only.
-   jQuery Mobile theme/styling polish is issue #14 (Linh). */
+/* StudySwap styles.
+
+   Structural rules below are shared. Theme / aesthetics polish is issue #14:
+   see docs/fe-theme-guide.md on branch feat/14-app-shell-theme.
+
+   Theme checklist for Linh:
+   - [ ] Choose header/button data-theme (or custom swatch)
+   - [ ] Brand colour tokens (--ss-* variables)
+   - [ ] Auth / browse / detail / form spacing polish
+   - [ ] Do not rename frozen page IDs; do not edit js/api.js
+*/
+
+:root {
+  /* Override these in #14 — placeholders only */
+  --ss-brand: #0b6e4f;
+  --ss-brand-ink: #063a2a;
+  --ss-surface: #f6f8f7;
+  --ss-accent: #c45c26;
+}
 
 /* Keep long listing titles from breaking layout */
 .ui-content h2.listing-title {
