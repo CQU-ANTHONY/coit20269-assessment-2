@@ -45,13 +45,20 @@
     font-size: 0.8em;
 }
 
-/* Listing form (#17) — structural only; theme polish is #14 */
+/* Auth forms (#15) — structural only; theme polish is #14 */
+.auth-switch {
+    text-align: center;
+    margin-top: 1.5em;
+}
+
+/* Shared field hint (auth #15 + listing form #17) */
 .field-hint {
     margin: -0.4em 0 1em;
     font-size: 0.85em;
     color: #666;
 }
 
+/* Listing form (#17) — structural only; theme polish is #14 */
 .photo-actions {
     margin: 0.5em 0 1em;
 }
