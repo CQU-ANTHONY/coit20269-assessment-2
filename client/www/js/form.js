@@ -6,6 +6,7 @@
  * sessionStorage keys:
  *   studyswap_edit_listing_id — if set, page is edit mode (GET listings/:id, PUT on save).
  *     Cleared after a successful save or delete. Unset = create mode (POST).
+ *   studyswap_selected_listing_id — set after save so #16 detail can open the listing.
  */
 
 (function () {
