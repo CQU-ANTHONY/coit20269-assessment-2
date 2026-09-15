@@ -29,22 +29,38 @@
 
   function setModeUi(isEdit) {
     $("#form-page-title").text(isEdit ? "Edit listing" : "New listing");
-    $("#listing-submit").text(isEdit ? "Save changes" : "Save listing");
+    $("#listing-submit")
+      .find(".btn__label")
+      .text(isEdit ? "Save changes" : "Save listing");
     $("#form-delete-wrap").prop("hidden", !isEdit);
   }
 
   function clearEditKey() {
     sessionStorage.removeItem(EDIT_KEY);
     editingId = null;
+    if (window.StudySwap) {
+      window.StudySwap.editListingId = null;
+    }
   }
 
+  /** Put the page into create mode right now, whether or not it is visible. */
+  function startNewListing() {
+    clearEditKey();
+    setModeUi(false);
+    resetForm();
+  }
+
+  /** Preview, prompt and Remove are one three-state block: keep them in sync. */
   function updatePhotoPreview(src) {
-    var $img = $("#listing-photo-preview");
-    if (src) {
-      $img.attr("src", src).prop("hidden", false).show();
-    } else {
-      $img.attr("src", "").prop("hidden", true).hide();
-    }
+    var has = !!src;
+    $("#listing-photo-preview")
+      .attr("src", has ? src : "")
+      .prop("hidden", !has);
+    $("#listing-photo-empty").prop("hidden", has);
+    $("#listing-photo-remove").prop("hidden", !has);
+    $("#listing-photo-camera")
+      .find(".btn__label")
+      .text(has ? "Replace photo" : "Take photo");
   }
 
   function resetForm() {
@@ -53,10 +69,6 @@
       form.reset();
     }
     updatePhotoPreview("");
-    var $cat = $("#listing-category");
-    if ($cat.data("mobile-selectmenu")) {
-      $cat.selectmenu("refresh");
-    }
   }
 
   function populateForm(listing) {
@@ -68,10 +80,6 @@
     $("#listing-category").val(listing.category || "");
     $("#listing-photo").val(listing.photo || "");
     updatePhotoPreview(listing.photo || "");
-    var $cat = $("#listing-category");
-    if ($cat.data("mobile-selectmenu")) {
-      $cat.selectmenu("refresh", true);
-    }
   }
 
   function validateAndBuildBody() {
@@ -208,6 +216,19 @@
     }
   });
 
+  // Every "new listing" entry point routes through here. The tab bar's Sell
+  // link is the case that matters: tapping it while #page-form is already
+  // showing changes no hash, so pagebeforeshow never fires — without this the
+  // form would keep the listing it was editing and "Save changes" would
+  // overwrite it instead of creating a new one.
+  $(document).on("click", ".js-new-listing", function () {
+    if ($.mobile.activePage && $.mobile.activePage.attr("id") === "page-form") {
+      startNewListing();
+    } else {
+      clearEditKey();
+    }
+  });
+
   $(document).on("input change", "#listing-photo", function () {
     updatePhotoPreview(String($(this).val() || "").trim());
   });
@@ -215,6 +236,12 @@
   $(document).on("click", "#listing-photo-camera", function (event) {
     event.preventDefault();
     takePhoto();
+  });
+
+  $(document).on("click", "#listing-photo-remove", function (event) {
+    event.preventDefault();
+    $("#listing-photo").val("");
+    updatePhotoPreview("");
   });
 
   $(document).on("change", "#listing-photo-file", function () {
@@ -241,7 +268,7 @@
     }
 
     var $submit = $("#listing-submit");
-    $submit.prop("disabled", true);
+    window.StudySwap.setBusy($submit, true);
 
     var request;
     if (editingId) {
@@ -265,7 +292,7 @@
       })
       .catch(toastError)
       .then(function () {
-        $submit.prop("disabled", false);
+        window.StudySwap.setBusy($submit, false);
       });
   });
 
@@ -279,7 +306,7 @@
     }
 
     var $btn = $("#listing-delete");
-    $btn.prop("disabled", true);
+    window.StudySwap.setBusy($btn, true);
 
     apiFetch("listings/" + editingId, { method: "DELETE", auth: true })
       .then(function () {
@@ -290,7 +317,7 @@
       })
       .catch(toastError)
       .then(function () {
-        $btn.prop("disabled", false);
+        window.StudySwap.setBusy($btn, false);
       });
   });
 })();

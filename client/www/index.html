@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>StudySwap</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#11111b">
+    <meta name="color-scheme" content="dark">
     <!-- Cordova: self + HTTPS API + camera data URLs / blobs. gap: for Cordova bridge. -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: content: https:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; media-src *;">
     <link rel="stylesheet" href="lib/css/jquery.mobile-1.4.5.min.css">
@@ -11,201 +13,420 @@
 </head>
 <body>
 
-<!-- ============ LOGIN (#page-login) — built by feat/15-auth-screens ============ -->
-<div data-role="page" id="page-login" data-theme="a">
-    <div data-role="header" data-theme="b">
-        <h1>StudySwap</h1>
-    </div>
+<!-- ============ ICON SPRITE ============================================
+     One authored 24px stroke set (1.75 weight, round caps) used by markup
+     and by js/ui.js via StudySwap.icon(). Kept outside every page div so a
+     single definition serves all pages; <use> resolves same-document.
+-->
+<svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <defs>
+        <g id="i-logo"><path d="M3.5 9h13L13 5.5"/><path d="M20.5 15h-13L11 18.5"/></g>
+        <g id="i-browse"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></g>
+        <g id="i-sell"><rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5"/><path d="M12 8.5v7M8.5 12h7"/></g>
+        <g id="i-user"><path d="M19.5 20.5v-1.75a4 4 0 0 0-4-4h-7a4 4 0 0 0-4 4v1.75"/><circle cx="12" cy="7.75" r="3.75"/></g>
+        <g id="i-back"><path d="M14.5 19 7.5 12l7-7"/></g>
+        <g id="i-search"><circle cx="10.75" cy="10.75" r="6.75"/><path d="m20 20-4.5-4.5"/></g>
+        <g id="i-camera"><path d="M3.5 8.75a2 2 0 0 1 2-2h1.9l1.2-2.25h6.8l1.2 2.25h1.9a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.4"/></g>
+        <g id="i-image"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="8.75" cy="9.75" r="1.6"/><path d="M20.5 15.5 16 11l-7.5 7.5"/></g>
+        <g id="i-trash"><path d="M4.5 7h15"/><path d="M6.5 7 7.4 19a2 2 0 0 0 2 1.9h5.2a2 2 0 0 0 2-1.9L17.5 7"/><path d="M9.75 7V5.25a1.25 1.25 0 0 1 1.25-1.25h2a1.25 1.25 0 0 1 1.25 1.25V7"/><path d="M10.25 10.75v6M13.75 10.75v6"/></g>
+        <g id="i-edit"><path d="M12.5 20.5H21"/><path d="M16.2 3.9a2.05 2.05 0 0 1 2.9 2.9L7.6 18.3 3.5 19.5l1.2-4.1z"/></g>
+        <g id="i-check"><circle cx="12" cy="12" r="8.5"/><path d="m8.25 12.25 2.5 2.5 5-5.5"/></g>
+        <g id="i-logout"><path d="m15.5 16.5 4.5-4.5-4.5-4.5"/><path d="M20 12H9.5"/><path d="M12.5 4.5h-6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h6"/></g>
+        <g id="i-alert"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.75v4.75"/><path d="M12 16.1v.05"/></g>
+        <g id="i-box"><path d="M20.5 8 12 3.5 3.5 8l8.5 4.5z"/><path d="M3.5 8v8L12 20.5l8.5-4.5V8"/><path d="M12 12.5v8"/></g>
+        <g id="i-tag"><path d="M20.4 13.4 13.3 20.5a2 2 0 0 1-2.8 0L3.5 13.5V4.6a1.1 1.1 0 0 1 1.1-1.1h8.9l6.9 6.9a2 2 0 0 1 0 3z"/><circle cx="7.9" cy="7.9" r="1.3"/></g>
+        <g id="i-mail"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="m4.5 7.5 6.3 4.6a2 2 0 0 0 2.4 0l6.3-4.6"/></g>
+        <g id="i-pin"><path d="M12 21s6.5-5.6 6.5-10.3a6.5 6.5 0 1 0-13 0C5.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10.5" r="2.4"/></g>
+        <g id="i-plus"><path d="M12 5.5v13M5.5 12h13"/></g>
+        <g id="i-link"><path d="M10.5 13.5a3.6 3.6 0 0 0 5.4.4l2.6-2.6a3.6 3.6 0 0 0-5.1-5.1l-1.5 1.5"/><path d="M13.5 10.5a3.6 3.6 0 0 0-5.4-.4l-2.6 2.6a3.6 3.6 0 0 0 5.1 5.1l1.5-1.5"/></g>
+    </defs>
+</svg>
+
+
+<!-- ============ LOGIN (#page-login) ============ -->
+<div data-role="page" id="page-login" data-theme="a" class="page-auth">
     <div role="main" class="ui-content">
-        <form id="form-login" data-ajax="false">
-            <label for="login-email">Email</label>
-            <input type="email" name="email" id="login-email" required autocomplete="email">
+        <div class="auth">
+            <div class="brand">
+                <span class="brand__mark"><svg class="icon" aria-hidden="true"><use xlink:href="#i-logo"></use></svg></span>
+                <span class="brand__word">StudySwap</span>
+            </div>
 
-            <label for="login-password">Password</label>
-            <input type="password" name="password" id="login-password" required autocomplete="current-password" minlength="8">
+            <h1 class="auth__title">Welcome back</h1>
+            <p class="auth__sub">Buy and sell second-hand gear with students on your campus.</p>
 
-            <button type="submit" id="login-submit" class="ui-btn ui-corner-all ui-btn-b">Log in</button>
-        </form>
-        <p class="auth-switch">
-            New here? <a href="#page-signup">Create an account</a>
-        </p>
-    </div>
-</div>
+            <form id="form-login" data-ajax="false" class="form" novalidate>
+                <div class="field">
+                    <label for="login-email">Email</label>
+                    <input type="email" name="email" id="login-email" data-role="none" required
+                           autocomplete="email" autocapitalize="off" spellcheck="false"
+                           placeholder="you@student.cqu.edu.au">
+                </div>
 
-<!-- ============ SIGNUP (#page-signup) — built by feat/15-auth-screens ============ -->
-<div data-role="page" id="page-signup" data-theme="a">
-    <div data-role="header" data-theme="b">
-        <a href="#page-login" data-rel="back" data-icon="carat-l" data-iconpos="notext">Back</a>
-        <h1>Create account</h1>
-    </div>
-    <div role="main" class="ui-content">
-        <form id="form-signup" data-ajax="false">
-            <label for="signup-name">Name</label>
-            <input type="text" name="name" id="signup-name" required autocomplete="name" maxlength="80">
+                <div class="field">
+                    <label for="login-password">Password</label>
+                    <input type="password" name="password" id="login-password" data-role="none" required
+                           autocomplete="current-password" minlength="8" placeholder="••••••••">
+                </div>
 
-            <label for="signup-email">Email</label>
-            <input type="email" name="email" id="signup-email" required autocomplete="email">
+                <button type="submit" id="login-submit" data-role="none" class="btn btn--primary btn--block btn--lg">
+                    <span class="btn__label">Log in</span>
+                </button>
+            </form>
 
-            <label for="signup-password">Password</label>
-            <input type="password" name="password" id="signup-password" required autocomplete="new-password" minlength="8">
-            <p class="field-hint">At least 8 characters.</p>
-
-            <label for="signup-campus" class="select">Campus</label>
-            <select name="campus" id="signup-campus">
-                <option value="other">Other / not listed</option>
-                <option value="BNE">Brisbane (BNE)</option>
-                <option value="SYD">Sydney (SYD)</option>
-                <option value="MEL">Melbourne (MEL)</option>
-                <option value="DST">Distance (DST)</option>
-            </select>
-
-            <button type="submit" id="signup-submit" class="ui-btn ui-corner-all ui-btn-b">Sign up</button>
-        </form>
-        <p class="auth-switch">
-            Already have an account? <a href="#page-login">Log in</a>
-        </p>
-    </div>
-</div>
-
-<!-- ============ BROWSE (#page-browse) — built by feat/16-browse-listings ============ -->
-<div data-role="page" id="page-browse" data-theme="a">
-    <div data-role="header" data-theme="b">
-        <h1>Browse listings</h1>
-        <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
-    </div>
-    <div role="main" class="ui-content">
-        <div class="browse-filters">
-            <label for="browse-category" class="select">Category</label>
-            <select name="category" id="browse-category" data-mini="true">
-                <option value="">All categories</option>
-                <option value="textbooks">Textbooks</option>
-                <option value="furniture">Furniture</option>
-                <option value="electronics">Electronics</option>
-                <option value="other">Other</option>
-            </select>
-
-            <label for="browse-search">Search</label>
-            <input type="search" name="q" id="browse-search" placeholder="Title or description" data-mini="true">
-
-            <button type="button" id="browse-refresh" class="ui-btn ui-corner-all ui-mini ui-btn-b">Refresh</button>
-        </div>
-
-        <ul id="browse-list" data-role="listview" data-inset="true"></ul>
-        <p id="browse-empty" class="empty-state" hidden>No listings found.</p>
-    </div>
-</div>
-
-<!-- ============ DETAIL (#page-detail) — built by feat/16-browse-listings ============ -->
-<div data-role="page" id="page-detail" data-theme="a">
-    <div data-role="header" data-theme="b">
-        <a href="#page-browse" data-icon="carat-l" data-iconpos="notext">Back</a>
-        <h1>Listing</h1>
-        <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
-    </div>
-    <div role="main" class="ui-content">
-        <div id="detail-loading" class="empty-state">Loading…</div>
-        <div id="detail-error" class="empty-state" hidden></div>
-        <div id="detail-content" hidden>
-            <img id="detail-photo" class="detail-photo" alt="" hidden>
-            <h2 class="listing-title" id="detail-title"></h2>
-            <p class="detail-meta">
-                <span id="detail-price" class="price-badge"></span>
-                <span id="detail-category"></span>
-                <span id="detail-status" class="sold-badge" hidden>Sold</span>
+            <p class="auth__switch">
+                New to StudySwap? <a href="#page-signup">Create an account</a>
             </p>
-            <p id="detail-description" class="detail-description"></p>
-            <div id="detail-seller" class="detail-seller">
-                <h3>Seller</h3>
-                <p id="detail-seller-name"></p>
-                <p id="detail-seller-campus"></p>
-            </div>
-            <div id="detail-owner-actions" class="owner-actions" hidden>
-                <a href="#page-form" id="detail-edit" class="ui-btn ui-corner-all ui-btn-b">Edit</a>
-                <button type="button" id="detail-mark-sold" class="ui-btn ui-corner-all">Mark sold</button>
-                <button type="button" id="detail-delete" class="ui-btn ui-corner-all ui-btn-a">Delete</button>
-            </div>
         </div>
     </div>
 </div>
 
-<!-- ============ FORM (#page-form) — built by feat/17-listing-forms ============ -->
-<div data-role="page" id="page-form" data-theme="a">
-    <div data-role="header" data-theme="b">
-        <h1 id="form-page-title">New listing</h1>
-        <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
-    </div>
+<!-- ============ SIGNUP (#page-signup) ============ -->
+<div data-role="page" id="page-signup" data-theme="a" class="page-auth">
     <div role="main" class="ui-content">
-        <form id="form-listing" data-ajax="false">
-            <label for="listing-title">Title</label>
-            <input type="text" name="title" id="listing-title" required maxlength="120" placeholder="e.g. Calculus textbook 9th ed">
+        <div class="auth">
+            <a href="#page-login" data-rel="back" data-role="none" class="auth__back">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                <span>Log in</span>
+            </a>
 
-            <label for="listing-description">Description</label>
-            <textarea name="description" id="listing-description" rows="4" maxlength="2000" placeholder="Condition, pickup notes, etc."></textarea>
+            <h1 class="auth__title">Create your account</h1>
+            <p class="auth__sub">It takes about a minute. Your campus helps buyers find you.</p>
 
-            <label for="listing-price">Price (AUD)</label>
-            <input type="number" name="price" id="listing-price" required min="0" step="0.01" placeholder="0.00">
+            <form id="form-signup" data-ajax="false" class="form" novalidate>
+                <div class="field">
+                    <label for="signup-name">Name</label>
+                    <input type="text" name="name" id="signup-name" data-role="none" required
+                           autocomplete="name" maxlength="80" placeholder="Alex Nguyen">
+                </div>
 
-            <label for="listing-category" class="select">Category</label>
-            <select name="category" id="listing-category" required>
-                <option value="">Select a category</option>
-                <option value="textbooks">Textbooks</option>
-                <option value="furniture">Furniture</option>
-                <option value="electronics">Electronics</option>
-                <option value="other">Other</option>
-            </select>
+                <div class="field">
+                    <label for="signup-email">Email</label>
+                    <input type="email" name="email" id="signup-email" data-role="none" required
+                           autocomplete="email" autocapitalize="off" spellcheck="false"
+                           placeholder="you@student.cqu.edu.au">
+                </div>
 
-            <label for="listing-photo">Photo (URL or base64)</label>
-            <input type="text" name="photo" id="listing-photo" placeholder="https://… or data:image/…">
-            <p class="field-hint">Paste a link or base64 data URL. Camera capture arrives with Cordova (#18).</p>
+                <div class="field">
+                    <label for="signup-password">Password</label>
+                    <input type="password" name="password" id="signup-password" data-role="none" required
+                           autocomplete="new-password" minlength="8" placeholder="At least 8 characters"
+                           aria-describedby="signup-password-hint">
+                    <p class="field__hint" id="signup-password-hint">Use 8 characters or more.</p>
+                </div>
 
-            <div class="photo-actions">
-                <button type="button" id="listing-photo-camera" class="ui-btn ui-corner-all ui-btn-inline">Take photo</button>
-                <input type="file" id="listing-photo-file" accept="image/*" capture="environment" class="listing-photo-file">
-            </div>
-            <img id="listing-photo-preview" class="listing-photo-preview" alt="Listing photo preview" hidden>
+                <div class="field">
+                    <label for="signup-campus">Campus</label>
+                    <div class="select">
+                        <select name="campus" id="signup-campus" data-role="none">
+                            <option value="other">Other / not listed</option>
+                            <option value="BNE">Brisbane (BNE)</option>
+                            <option value="SYD">Sydney (SYD)</option>
+                            <option value="MEL">Melbourne (MEL)</option>
+                            <option value="DST">Distance (DST)</option>
+                        </select>
+                        <svg class="icon select__caret" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                    </div>
+                </div>
 
-            <button type="submit" id="listing-submit" class="ui-btn ui-corner-all ui-btn-b">Save listing</button>
+                <button type="submit" id="signup-submit" data-role="none" class="btn btn--primary btn--block btn--lg">
+                    <span class="btn__label">Create account</span>
+                </button>
+            </form>
+
+            <p class="auth__switch">
+                Already have an account? <a href="#page-login">Log in</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- ============ BROWSE (#page-browse) ============ -->
+<div data-role="page" id="page-browse" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot">
+            <span class="app-bar__mark"><svg class="icon" aria-hidden="true"><use xlink:href="#i-logo"></use></svg></span>
+        </div>
+        <h1>Browse</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
+    </div>
+
+    <div role="main" class="ui-content">
+        <form class="searchbar" id="browse-searchbar" data-ajax="false" role="search">
+            <svg class="icon searchbar__icon" aria-hidden="true"><use xlink:href="#i-search"></use></svg>
+            <input type="search" name="q" id="browse-search" data-role="none" class="searchbar__input"
+                   placeholder="Search titles and descriptions" autocapitalize="off" spellcheck="false"
+                   aria-label="Search listings">
+            <button type="button" id="browse-clear" data-role="none" class="searchbar__clear" aria-label="Clear search" hidden>
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-plus"></use></svg>
+            </button>
         </form>
 
-        <div id="form-delete-wrap" class="form-delete-wrap" hidden>
-            <button type="button" id="listing-delete" class="ui-btn ui-corner-all ui-btn-a">Delete listing</button>
+        <input type="hidden" name="category" id="browse-category" value="">
+        <div class="chips" id="browse-chips" role="group" aria-label="Filter by category">
+            <button type="button" data-role="none" class="chip is-active" data-category="">All</button>
+            <button type="button" data-role="none" class="chip" data-category="textbooks">Textbooks</button>
+            <button type="button" data-role="none" class="chip" data-category="furniture">Furniture</button>
+            <button type="button" data-role="none" class="chip" data-category="electronics">Electronics</button>
+            <button type="button" data-role="none" class="chip" data-category="other">Other</button>
         </div>
+
+        <div class="results-bar">
+            <p class="results-bar__count" id="browse-count" aria-live="polite"></p>
+            <button type="button" id="browse-refresh" data-role="none" class="btn btn--ghost btn--sm">Refresh</button>
+        </div>
+
+        <ul id="browse-list" class="cards" aria-busy="false"></ul>
+        <div id="browse-empty" class="state" hidden></div>
+    </div>
+
+    <div data-role="footer" data-theme="a" class="tabbar">
+        <a href="#page-browse" data-role="none" class="tab is-active"><svg class="icon" aria-hidden="true"><use xlink:href="#i-browse"></use></svg><span>Browse</span></a>
+        <a href="#page-form" data-role="none" class="tab js-new-listing"><svg class="icon" aria-hidden="true"><use xlink:href="#i-sell"></use></svg><span>Sell</span></a>
+        <a href="#page-profile" data-role="none" class="tab"><svg class="icon" aria-hidden="true"><use xlink:href="#i-user"></use></svg><span>Profile</span></a>
     </div>
 </div>
 
-<!-- ============ PROFILE (#page-profile) — built by feat/16-browse-listings ============ -->
-<div data-role="page" id="page-profile" data-theme="a">
-    <div data-role="header" data-theme="b">
-        <h1>Profile</h1>
-        <a href="#popup-menu" data-rel="popup" data-icon="bars" data-iconpos="notext" class="ui-btn-right">Menu</a>
+<!-- ============ DETAIL (#page-detail) ============ -->
+<div data-role="page" id="page-detail" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot">
+            <a href="#page-browse" data-rel="back" data-role="none" class="icon-btn" aria-label="Back">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+            </a>
+        </div>
+        <h1>Listing</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
     </div>
+
     <div role="main" class="ui-content">
-        <div id="profile-user" class="profile-user">
-            <h2 id="profile-name"></h2>
-            <p id="profile-email"></p>
-            <p id="profile-campus"></p>
+        <div id="detail-loading" class="detail-skeleton" aria-live="polite" aria-label="Loading listing">
+            <div class="skel skel--media"></div>
+            <div class="skel skel--line" style="width:72%"></div>
+            <div class="skel skel--line" style="width:40%"></div>
+            <div class="skel skel--block"></div>
         </div>
 
-        <a href="#page-form" id="profile-new-listing" class="ui-btn ui-corner-all ui-btn-b ui-icon-plus ui-btn-icon-left">New listing</a>
+        <div id="detail-error" class="state" hidden></div>
 
-        <h3>My listings</h3>
-        <ul id="profile-list" data-role="listview" data-inset="true"></ul>
-        <p id="profile-empty" class="empty-state" hidden>You have no listings yet.</p>
+        <div id="detail-content" hidden>
+            <figure class="media" id="detail-media">
+                <img id="detail-photo" class="media__img" alt="" hidden>
+                <span class="media__fallback" id="detail-photo-fallback">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-image"></use></svg>
+                    <span>No photo</span>
+                </span>
+            </figure>
+
+            <div class="detail-head">
+                <div class="detail-head__tags">
+                    <span id="detail-category" class="chip chip--static"></span>
+                    <span id="detail-status" class="chip chip--sold" hidden>Sold</span>
+                </div>
+                <h2 class="detail-head__title" id="detail-title"></h2>
+                <p class="detail-head__price" id="detail-price"></p>
+            </div>
+
+            <section class="section">
+                <h3 class="section__title">Description</h3>
+                <p id="detail-description" class="detail-description"></p>
+            </section>
+
+            <section class="section" id="detail-seller">
+                <h3 class="section__title">Seller</h3>
+                <div class="person">
+                    <span class="avatar" id="detail-seller-avatar" aria-hidden="true"></span>
+                    <span class="person__body">
+                        <span class="person__name" id="detail-seller-name"></span>
+                        <span class="person__meta" id="detail-seller-campus"></span>
+                    </span>
+                </div>
+            </section>
+
+            <div id="detail-owner-actions" class="actions" hidden>
+                <a href="#page-form" id="detail-edit" data-role="none" class="btn btn--primary btn--block">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-edit"></use></svg>
+                    <span class="btn__label">Edit listing</span>
+                </a>
+                <button type="button" id="detail-mark-sold" data-role="none" class="btn btn--block">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-check"></use></svg>
+                    <span class="btn__label">Mark sold</span>
+                </button>
+                <button type="button" id="detail-delete" data-role="none" class="btn btn--danger btn--block">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-trash"></use></svg>
+                    <span class="btn__label">Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="footer" data-theme="a" class="tabbar">
+        <a href="#page-browse" data-role="none" class="tab is-active"><svg class="icon" aria-hidden="true"><use xlink:href="#i-browse"></use></svg><span>Browse</span></a>
+        <a href="#page-form" data-role="none" class="tab js-new-listing"><svg class="icon" aria-hidden="true"><use xlink:href="#i-sell"></use></svg><span>Sell</span></a>
+        <a href="#page-profile" data-role="none" class="tab"><svg class="icon" aria-hidden="true"><use xlink:href="#i-user"></use></svg><span>Profile</span></a>
     </div>
 </div>
 
-<!-- ============ SHARED NAV POPUP (all pages except login/signup) ============ -->
-<div data-role="popup" id="popup-menu" data-overlay-theme="b">
-    <ul data-role="listview" data-inset="true">
-        <li><a href="#page-browse" class="ui-btn ui-icon-home ui-btn-icon-left">Browse</a></li>
-        <li><a href="#page-profile" class="ui-btn ui-icon-user ui-btn-icon-left">Profile</a></li>
-        <li><a href="#" id="nav-logout" class="ui-btn ui-icon-lock ui-btn-icon-left">Logout</a></li>
-    </ul>
+<!-- ============ FORM (#page-form) ============ -->
+<div data-role="page" id="page-form" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot">
+            <a href="#page-browse" data-rel="back" data-role="none" class="icon-btn" aria-label="Back">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+            </a>
+        </div>
+        <h1 id="form-page-title">New listing</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
+    </div>
+
+    <div role="main" class="ui-content">
+        <form id="form-listing" data-ajax="false" class="form" novalidate>
+            <div class="field">
+                <label for="listing-title">Title</label>
+                <input type="text" name="title" id="listing-title" data-role="none" required maxlength="120"
+                       placeholder="Calculus: Early Transcendentals, 9th ed">
+            </div>
+
+            <div class="field">
+                <label for="listing-description">Description</label>
+                <textarea name="description" id="listing-description" data-role="none" rows="4" maxlength="2000"
+                          placeholder="Condition, edition, pickup spot and times."></textarea>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="listing-price">Price (AUD)</label>
+                    <div class="input-prefix">
+                        <span class="input-prefix__mark" aria-hidden="true">$</span>
+                        <input type="number" name="price" id="listing-price" data-role="none" required
+                               min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="listing-category">Category</label>
+                    <div class="select">
+                        <select name="category" id="listing-category" data-role="none" required>
+                            <option value="">Choose one</option>
+                            <option value="textbooks">Textbooks</option>
+                            <option value="furniture">Furniture</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <svg class="icon select__caret" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <span class="field__label" id="listing-photo-label">Photo</span>
+                <div class="photo" role="group" aria-labelledby="listing-photo-label">
+                    <img id="listing-photo-preview" class="photo__preview" alt="Listing photo preview" hidden>
+                    <div class="photo__empty" id="listing-photo-empty">
+                        <svg class="icon" aria-hidden="true"><use xlink:href="#i-image"></use></svg>
+                        <p>Listings with a photo sell faster.</p>
+                    </div>
+                    <div class="photo__actions">
+                        <button type="button" id="listing-photo-camera" data-role="none" class="btn btn--sm">
+                            <svg class="icon" aria-hidden="true"><use xlink:href="#i-camera"></use></svg>
+                            <span class="btn__label">Take photo</span>
+                        </button>
+                        <button type="button" id="listing-photo-remove" data-role="none" class="btn btn--ghost btn--sm" hidden>
+                            <span class="btn__label">Remove</span>
+                        </button>
+                    </div>
+                    <input type="file" id="listing-photo-file" data-role="none" accept="image/*" capture="environment" class="visually-hidden">
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="listing-photo">Photo link</label>
+                <div class="input-prefix">
+                    <svg class="icon input-prefix__mark" aria-hidden="true"><use xlink:href="#i-link"></use></svg>
+                    <input type="text" name="photo" id="listing-photo" data-role="none"
+                           autocapitalize="off" spellcheck="false" placeholder="https://… or data:image/…"
+                           aria-describedby="listing-photo-hint">
+                </div>
+                <p class="field__hint" id="listing-photo-hint">Optional if you took a photo above.</p>
+            </div>
+
+            <button type="submit" id="listing-submit" data-role="none" class="btn btn--primary btn--block btn--lg">
+                <span class="btn__label">Save listing</span>
+            </button>
+        </form>
+
+        <div id="form-delete-wrap" class="danger-zone" hidden>
+            <button type="button" id="listing-delete" data-role="none" class="btn btn--danger btn--block">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-trash"></use></svg>
+                <span class="btn__label">Delete listing</span>
+            </button>
+        </div>
+    </div>
+
+    <div data-role="footer" data-theme="a" class="tabbar">
+        <a href="#page-browse" data-role="none" class="tab"><svg class="icon" aria-hidden="true"><use xlink:href="#i-browse"></use></svg><span>Browse</span></a>
+        <a href="#page-form" data-role="none" class="tab is-active js-new-listing"><svg class="icon" aria-hidden="true"><use xlink:href="#i-sell"></use></svg><span>Sell</span></a>
+        <a href="#page-profile" data-role="none" class="tab"><svg class="icon" aria-hidden="true"><use xlink:href="#i-user"></use></svg><span>Profile</span></a>
+    </div>
 </div>
 
-<!-- ============ SHARED TOAST POPUP (used by api.js) ============ -->
-<div data-role="popup" id="toast-popup" data-overlay-theme="b" data-dismissible="true">
-    <p id="toast-text"></p>
+<!-- ============ PROFILE (#page-profile) ============ -->
+<div data-role="page" id="page-profile" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot"></div>
+        <h1>Profile</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
+    </div>
+
+    <div role="main" class="ui-content">
+        <div id="profile-user" class="profile">
+            <span class="avatar avatar--lg" id="profile-avatar" aria-hidden="true"></span>
+            <h2 id="profile-name" class="profile__name"></h2>
+            <p class="profile__row">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-mail"></use></svg>
+                <span id="profile-email"></span>
+            </p>
+            <p class="profile__row">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-pin"></use></svg>
+                <span id="profile-campus"></span>
+            </p>
+        </div>
+
+        <a href="#page-form" id="profile-new-listing" data-role="none" class="btn btn--primary btn--block js-new-listing">
+            <svg class="icon" aria-hidden="true"><use xlink:href="#i-plus"></use></svg>
+            <span class="btn__label">New listing</span>
+        </a>
+
+        <div class="results-bar results-bar--section">
+            <h3 class="section__title">My listings</h3>
+            <p class="results-bar__count" id="profile-count" aria-live="polite"></p>
+        </div>
+
+        <ul id="profile-list" class="cards" aria-busy="false"></ul>
+        <div id="profile-empty" class="state" hidden></div>
+
+        <div class="danger-zone">
+            <button type="button" id="nav-logout" data-role="none" class="btn btn--ghost btn--block">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-logout"></use></svg>
+                <span class="btn__label">Log out</span>
+            </button>
+        </div>
+    </div>
+
+    <div data-role="footer" data-theme="a" class="tabbar">
+        <a href="#page-browse" data-role="none" class="tab"><svg class="icon" aria-hidden="true"><use xlink:href="#i-browse"></use></svg><span>Browse</span></a>
+        <a href="#page-form" data-role="none" class="tab js-new-listing"><svg class="icon" aria-hidden="true"><use xlink:href="#i-sell"></use></svg><span>Sell</span></a>
+        <a href="#page-profile" data-role="none" class="tab is-active"><svg class="icon" aria-hidden="true"><use xlink:href="#i-user"></use></svg><span>Profile</span></a>
+    </div>
+</div>
+
+<!-- ============ TOAST (used by api.js) ============
+     Plain element, not a jQM popup: a status message must not take an overlay
+     or steal focus the way a dialog does.
+-->
+<div id="toast-popup" class="toast" role="status" aria-live="polite" hidden>
+    <svg class="icon toast__icon" aria-hidden="true"><use xlink:href="#i-check"></use></svg>
+    <p id="toast-text" class="toast__text"></p>
 </div>
 
 <!-- cordova.js is injected at build/run time (gitignored). Load before jQuery. -->
@@ -220,6 +441,7 @@
 </script>
 <script src="lib/jquery.mobile-1.4.5.min.js"></script>
 <script src="js/api.js"></script>
+<script src="js/ui.js"></script>
 <script src="js/login.js"></script>
 <script src="js/signup.js"></script>
 <script src="js/browse.js"></script>
