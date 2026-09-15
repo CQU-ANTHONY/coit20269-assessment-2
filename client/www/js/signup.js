@@ -26,15 +26,15 @@
     var $submit = $("#signup-submit");
 
     if (!name || !email || !password) {
-      toast("Name, email and password are required");
+      toast("Fill in your name, email and password", "error");
       return;
     }
     if (password.length < 8) {
-      toast("Password must be at least 8 characters");
+      toast("Password must be at least 8 characters", "error");
       return;
     }
 
-    $submit.prop("disabled", true);
+    window.StudySwap.setBusy($submit, true);
 
     apiFetch("users/signup", {
       method: "POST",
@@ -56,7 +56,7 @@
       })
       .catch(toastError)
       .then(function () {
-        $submit.prop("disabled", false);
+        window.StudySwap.setBusy($submit, false);
       });
   });
 })();

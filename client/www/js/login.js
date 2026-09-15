@@ -25,11 +25,11 @@
     var $submit = $("#login-submit");
 
     if (!email || !password) {
-      toast("Email and password are required");
+      toast("Enter your email and password", "error");
       return;
     }
 
-    $submit.prop("disabled", true);
+    window.StudySwap.setBusy($submit, true);
 
     apiFetch("users/login", {
       method: "POST",
@@ -44,7 +44,7 @@
       })
       .catch(toastError)
       .then(function () {
-        $submit.prop("disabled", false);
+        window.StudySwap.setBusy($submit, false);
       });
   });
 

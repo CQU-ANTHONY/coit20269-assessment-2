@@ -13,8 +13,10 @@
 
 /* eslint-disable no-unused-vars */
 
-// Dev default: local Express server. On Render, overridden in config step.
-var API_BASE = "https://localhost:3000/api";
+// Dev default: docker compose maps the API container's port 3000 to host
+// port 3100 (see compose.yaml) and runs it over plain HTTP. On Render,
+// overridden in config step.
+var API_BASE = "http://localhost:3100/api";
 
 var TOKEN_KEY = "studyswap_token";
 
@@ -108,28 +110,51 @@ function logout() {
 }
 
 // ---------------------------------------------------------------------------
-// Toast (single shared jQuery Mobile popup, declared in index.html)
+// Toast (single shared element, declared in index.html)
 // ---------------------------------------------------------------------------
 
+// Deliberately not a jQuery Mobile popup: a status message must not throw an
+// overlay over the page or take focus the way a dialog does. #toast-popup is a
+// plain aria-live region that sits above the tab bar and fades itself out.
+
+var TOAST_MS = 3200;
 var _toastTimer = null;
 
-function toast(message) {
+/**
+ * toast("Listing created")           — confirmation
+ * toast("Price is required", "error") — problem
+ */
+function toast(message, kind) {
   var popup = document.getElementById("toast-popup");
   var text = document.getElementById("toast-text");
-  if (!popup || typeof $ === "undefined") {
-    // Fallback when navigating between pages removed the popup from DOM.
-    alert(message);
+
+  if (!popup || !text) {
+    // No toast host in the DOM (e.g. a page rendered standalone).
     return;
   }
+
+  var isError = kind === "error";
   text.textContent = message;
-  $("#toast-popup").popup("open");
+  popup.className = "toast" + (isError ? " toast--error" : "");
+  popup.querySelector("use").setAttribute("xlink:href", isError ? "#i-alert" : "#i-check");
+
+  popup.hidden = false;
+  // Next frame, so the transition runs from the hidden state rather than
+  // being collapsed into the same style recalculation.
+  window.requestAnimationFrame(function () {
+    popup.classList.add("is-open");
+  });
+
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(function () {
-    $("#toast-popup").popup("close");
-  }, 2500);
+    popup.classList.remove("is-open");
+    _toastTimer = setTimeout(function () {
+      popup.hidden = true;
+    }, 240);
+  }, TOAST_MS);
 }
 
 /** Convenience: toast the message from an apiFetch rejection. */
 function toastError(err) {
-  toast((err && err.message) || "Something went wrong");
+  toast((err && err.message) || "Something went wrong", "error");
 }

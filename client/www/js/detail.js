@@ -6,29 +6,21 @@
  */
 
 (function () {
-  window.StudySwap = window.StudySwap || {};
+  var SS = (window.StudySwap = window.StudySwap || {});
 
   var SELECTED_KEY = "studyswap_selected_listing_id";
   var EDIT_KEY = "studyswap_edit_listing_id";
   var currentListing = null;
 
   function getSelectedId() {
-    if (window.StudySwap.selectedListingId) {
-      return window.StudySwap.selectedListingId;
+    if (SS.selectedListingId) {
+      return SS.selectedListingId;
     }
     try {
       return window.sessionStorage.getItem(SELECTED_KEY) || "";
     } catch {
       return "";
     }
-  }
-
-  function formatPrice(price) {
-    var n = Number(price);
-    if (isNaN(n)) {
-      return "$—";
-    }
-    return "$" + n.toFixed(n % 1 === 0 ? 0 : 2);
   }
 
   function sellerId(seller) {
@@ -41,52 +33,57 @@
     return String(seller._id || seller.id || "");
   }
 
-  function campusLabel(campus) {
-    var map = {
-      BNE: "Brisbane (BNE)",
-      SYD: "Sydney (SYD)",
-      MEL: "Melbourne (MEL)",
-      DST: "Distance (DST)",
-      other: "Other",
-    };
-    return map[campus] || campus || "—";
-  }
-
   function showState(which) {
     $("#detail-loading").prop("hidden", which !== "loading");
     $("#detail-error").prop("hidden", which !== "error");
     $("#detail-content").prop("hidden", which !== "content");
   }
 
-  function renderListing(listing, me) {
-    currentListing = listing;
-
+  function renderPhoto(listing) {
     var $photo = $("#detail-photo");
+    var $fallback = $("#detail-photo-fallback");
+
     if (listing.photo) {
       $photo
         .attr("src", listing.photo)
         .attr("alt", listing.title || "Listing photo")
         .prop("hidden", false);
+      $fallback.prop("hidden", true);
     } else {
       $photo.removeAttr("src").prop("hidden", true);
+      $fallback.prop("hidden", false);
     }
+  }
+
+  function renderListing(listing, me) {
+    currentListing = listing;
+
+    renderPhoto(listing);
 
     $("#detail-title").text(listing.title || "Untitled");
-    $("#detail-price").text(formatPrice(listing.price));
-    $("#detail-category").text(listing.category || "");
-    $("#detail-description").text(listing.description || "No description.");
+    $("#detail-price").text(SS.formatPrice(listing.price));
+    $("#detail-category")
+      .text(SS.categoryLabel(listing.category))
+      .attr("data-category", listing.category || "");
+
+    var description = String(listing.description || "").trim();
+    $("#detail-description")
+      .text(description || "The seller did not add a description.")
+      .toggleClass("is-empty", !description);
 
     var sold = listing.status === "sold";
     $("#detail-status").prop("hidden", !sold);
     $("#detail-mark-sold")
       .prop("disabled", sold)
-      .text(sold ? "Sold" : "Mark sold");
+      .find(".btn__label")
+      .text(sold ? "Already sold" : "Mark sold");
 
     var seller = listing.seller || {};
-    var name = typeof seller === "object" ? seller.name : "";
+    var name = (typeof seller === "object" && seller.name) || "Unknown seller";
     var campus = typeof seller === "object" ? seller.campus : "";
-    $("#detail-seller-name").text(name || "Unknown seller");
-    $("#detail-seller-campus").text(campus ? campusLabel(campus) : "");
+    $("#detail-seller-avatar").text(SS.initials(name));
+    $("#detail-seller-name").text(name);
+    $("#detail-seller-campus").text(SS.campusLabel(campus));
 
     var myId = me && me.id ? String(me.id) : "";
     var isOwner = myId && myId === sellerId(seller);
@@ -102,7 +99,12 @@
     $("#detail-owner-actions").prop("hidden", true);
 
     if (!id) {
-      $("#detail-error").text("No listing selected.").prop("hidden", false);
+      SS.renderState($("#detail-error"), {
+        variant: "error",
+        icon: "alert",
+        title: "No listing selected",
+        text: "Open a listing from Browse to see its details.",
+      });
       showState("error");
       return;
     }
@@ -129,13 +131,23 @@
         renderListing(listing, me);
       })
       .catch(function (err) {
-        $("#detail-error").text((err && err.message) || "Could not load listing");
+        SS.renderState($("#detail-error"), {
+          variant: "error",
+          icon: "alert",
+          title: "Could not load listing",
+          text: (err && err.message) || "Check your connection and try again.",
+          action: { id: "detail-retry", label: "Try again" },
+        });
         showState("error");
         toastError(err);
       });
   }
 
   $(document).on("pagebeforeshow", "#page-detail", function () {
+    loadDetail();
+  });
+
+  $(document).on("click", "#detail-retry", function () {
     loadDetail();
   });
 
@@ -146,9 +158,9 @@
     try {
       window.sessionStorage.setItem(EDIT_KEY, currentListing._id);
     } catch {
-      // ignore
+      // ignore — the global below still carries the id for this session.
     }
-    window.StudySwap.editListingId = currentListing._id;
+    SS.editListingId = currentListing._id;
   });
 
   $(document).on("click", "#detail-mark-sold", function () {
@@ -158,11 +170,13 @@
     if (currentListing.status === "sold") {
       return;
     }
-    if (!window.confirm("Mark this listing as sold?")) {
+    if (!window.confirm("Mark this listing as sold? Buyers will still see it.")) {
       return;
     }
 
-    var $btn = $(this).prop("disabled", true);
+    var $btn = $(this);
+    SS.setBusy($btn, true);
+
     apiFetch("listings/" + encodeURIComponent(currentListing._id), {
       method: "PUT",
       body: { status: "sold" },
@@ -173,8 +187,10 @@
         loadDetail();
       })
       .catch(function (err) {
-        $btn.prop("disabled", false);
         toastError(err);
+      })
+      .then(function () {
+        SS.setBusy($btn, false);
       });
   });
 
@@ -186,6 +202,9 @@
       return;
     }
 
+    var $btn = $(this);
+    SS.setBusy($btn, true);
+
     apiFetch("listings/" + encodeURIComponent(currentListing._id), {
       method: "DELETE",
       auth: true,
@@ -195,6 +214,9 @@
         currentListing = null;
         window.location.hash = "#page-browse";
       })
-      .catch(toastError);
+      .catch(toastError)
+      .then(function () {
+        SS.setBusy($btn, false);
+      });
   });
 })();
