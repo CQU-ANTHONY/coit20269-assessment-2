@@ -1,0 +1,158 @@
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  min-height: 44px;
+  padding: 0 var(--s5);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--fg);
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--ctp-surface0);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition:
+    background-color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    box-shadow var(--t-base) var(--ease),
+    transform var(--t-fast) var(--ease),
+    opacity var(--t-fast) var(--ease);
+}
+
+.ui-page a.btn,
+.ui-page a.btn:visited {
+  color: var(--fg);
+}
+
+.btn .icon {
+  font-size: 15px;
+}
+
+.btn:hover {
+  background-color: var(--ctp-surface1);
+  border-color: var(--ctp-surface2);
+}
+
+.btn:active {
+  transform: scale(0.985);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+.btn--lg {
+  min-height: 50px;
+  font-size: 16px;
+}
+
+.btn--sm {
+  min-height: 36px;
+  padding: 0 var(--s3);
+  font-size: 13px;
+  border-radius: var(--r-sm);
+}
+
+.btn--sm .icon {
+  font-size: 13px;
+}
+
+.btn--primary,
+.ui-page a.btn--primary,
+.ui-page a.btn--primary:visited {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: var(--sh-sm);
+}
+
+.btn--primary:hover,
+.ui-page a.btn--primary:hover {
+  background-color: var(--accent-hi);
+  border-color: var(--accent-hi);
+  color: var(--accent-ink);
+  box-shadow: var(--sh-md);
+}
+
+.btn--primary:active {
+  background-color: var(--accent-lo);
+  border-color: var(--accent-lo);
+}
+
+.btn--danger {
+  background-color: transparent;
+  border-color: rgba(243, 139, 168, 0.35);
+  color: var(--danger);
+}
+
+.btn--danger:hover {
+  background-color: var(--danger-wash);
+  border-color: var(--danger);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  border-color: var(--line);
+  color: var(--fg-muted);
+}
+
+.btn--ghost:hover {
+  background-color: rgba(205, 214, 244, 0.06);
+  border-color: var(--line-strong);
+  color: var(--fg);
+}
+
+/* Busy state — driven by js/ui.js, no layout shift while the label swaps. */
+.btn.is-busy {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.btn.is-busy .btn__label {
+  visibility: hidden;
+}
+
+.btn.is-busy .icon {
+  display: none;
+}
+
+.btn.is-busy::after {
+  content: "";
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--r-full);
+  animation: spin 620ms linear infinite;
+}
+
+.btn.is-busy {
+  position: relative;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

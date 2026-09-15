@@ -1,0 +1,75 @@
+<!-- ============ DETAIL (#page-detail) ============ -->
+<div data-role="page" id="page-detail" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot">
+            <a href="#page-browse" data-rel="back" data-role="none" class="icon-btn" aria-label="Back">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+            </a>
+        </div>
+        <h1>Listing</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
+    </div>
+
+    <div role="main" class="ui-content">
+        <div id="detail-loading" class="detail-skeleton" aria-live="polite" aria-label="Loading listing">
+            <div class="skel skel--media"></div>
+            <div class="skel skel--line" style="width:72%"></div>
+            <div class="skel skel--line" style="width:40%"></div>
+            <div class="skel skel--block"></div>
+        </div>
+
+        <div id="detail-error" class="state" hidden></div>
+
+        <div id="detail-content" hidden>
+            <figure class="media" id="detail-media">
+                <img id="detail-photo" class="media__img" alt="" hidden>
+                <span class="media__fallback" id="detail-photo-fallback">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-image"></use></svg>
+                    <span>No photo</span>
+                </span>
+            </figure>
+
+            <div class="detail-head">
+                <div class="detail-head__tags">
+                    <span id="detail-category" class="chip chip--static"></span>
+                    <span id="detail-status" class="chip chip--sold" hidden>Sold</span>
+                </div>
+                <h2 class="detail-head__title" id="detail-title"></h2>
+                <p class="detail-head__price" id="detail-price"></p>
+            </div>
+
+            <section class="section">
+                <h3 class="section__title">Description</h3>
+                <p id="detail-description" class="detail-description"></p>
+            </section>
+
+            <section class="section" id="detail-seller">
+                <h3 class="section__title">Seller</h3>
+                <div class="person">
+                    <span class="avatar" id="detail-seller-avatar" aria-hidden="true"></span>
+                    <span class="person__body">
+                        <span class="person__name" id="detail-seller-name"></span>
+                        <span class="person__meta" id="detail-seller-campus"></span>
+                    </span>
+                </div>
+            </section>
+
+            <div id="detail-owner-actions" class="actions" hidden>
+                <a href="#page-form" id="detail-edit" data-role="none" class="btn btn--primary btn--block">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-edit"></use></svg>
+                    <span class="btn__label">Edit listing</span>
+                </a>
+                <button type="button" id="detail-mark-sold" data-role="none" class="btn btn--block">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-check"></use></svg>
+                    <span class="btn__label">Mark sold</span>
+                </button>
+                <button type="button" id="detail-delete" data-role="none" class="btn btn--danger btn--block">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-trash"></use></svg>
+                    <span class="btn__label">Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div data-ss-tabbar="browse"></div>
+</div>

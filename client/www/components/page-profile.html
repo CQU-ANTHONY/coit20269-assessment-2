@@ -1,0 +1,45 @@
+<!-- ============ PROFILE (#page-profile) ============ -->
+<div data-role="page" id="page-profile" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot"></div>
+        <h1>Profile</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
+    </div>
+
+    <div role="main" class="ui-content">
+        <div id="profile-user" class="profile">
+            <span class="avatar avatar--lg" id="profile-avatar" aria-hidden="true"></span>
+            <h2 id="profile-name" class="profile__name"></h2>
+            <p class="profile__row">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-mail"></use></svg>
+                <span id="profile-email"></span>
+            </p>
+            <p class="profile__row">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-pin"></use></svg>
+                <span id="profile-campus"></span>
+            </p>
+        </div>
+
+        <a href="#page-form" id="profile-new-listing" data-role="none" class="btn btn--primary btn--block js-new-listing">
+            <svg class="icon" aria-hidden="true"><use xlink:href="#i-plus"></use></svg>
+            <span class="btn__label">New listing</span>
+        </a>
+
+        <div class="results-bar results-bar--section">
+            <h3 class="section__title">My listings</h3>
+            <p class="results-bar__count" id="profile-count" aria-live="polite"></p>
+        </div>
+
+        <ul id="profile-list" class="cards" aria-busy="false"></ul>
+        <div id="profile-empty" class="state" hidden></div>
+
+        <div class="danger-zone">
+            <button type="button" id="nav-logout" data-role="none" class="btn btn--ghost btn--block">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-logout"></use></svg>
+                <span class="btn__label">Log out</span>
+            </button>
+        </div>
+    </div>
+
+    <div data-ss-tabbar="profile"></div>
+</div>

@@ -1,0 +1,49 @@
+/* ==========================================================================
+   Toast
+   ========================================================================== */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--tab-h) + var(--safe-b) + var(--s4));
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  width: max-content;
+  max-width: min(420px, calc(100vw - var(--s7)));
+  padding: var(--s3) var(--s5) var(--s3) var(--s4);
+  background-color: var(--ctp-surface0);
+  border: 1px solid var(--ctp-surface1);
+  border-radius: var(--r-full);
+  box-shadow: var(--sh-lg);
+  transform: translate(-50%, 12px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--t-base) var(--ease),
+    transform var(--t-base) var(--ease);
+}
+
+.toast.is-open {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.toast__icon {
+  font-size: 17px;
+  color: var(--ctp-green);
+}
+
+.toast--error .toast__icon {
+  color: var(--danger);
+}
+
+.toast__text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--fg);
+}
+
