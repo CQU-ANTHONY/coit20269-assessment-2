@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Auth pages
+   ========================================================================== */
+
+.page-auth .ui-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.auth {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: var(--s7) 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s8);
+}
+
+.brand__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+  color: var(--accent-ink);
+  background: linear-gradient(150deg, var(--accent) 0%, var(--ctp-blue) 130%);
+  border-radius: 14px;
+  box-shadow: var(--sh-md);
+}
+
+.brand__word {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.auth__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  margin-bottom: var(--s7);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth__back .icon {
+  font-size: 13px;
+}
+
+.auth__title {
+  margin: 0 0 var(--s2);
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+
+.auth__sub {
+  margin: 0 0 var(--s7);
+  max-width: 34ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--fg-muted);
+}
+
+.auth #login-submit,
+.auth #signup-submit {
+  margin-top: var(--s6);
+}
+
+.auth__switch {
+  margin: var(--s7) 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: var(--fg-muted);
+}
+
+.auth__switch a {
+  font-weight: 600;
+}
+

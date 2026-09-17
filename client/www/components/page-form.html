@@ -1,0 +1,98 @@
+<!-- ============ FORM (#page-form) ============ -->
+<div data-role="page" id="page-form" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot">
+            <a href="#page-browse" data-rel="back" data-role="none" class="icon-btn" aria-label="Back">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+            </a>
+        </div>
+        <h1 id="form-page-title">New listing</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
+    </div>
+
+    <div role="main" class="ui-content">
+        <form id="form-listing" data-ajax="false" class="form" novalidate>
+            <div class="field">
+                <label for="listing-title">Title</label>
+                <input type="text" name="title" id="listing-title" data-role="none" required maxlength="120"
+                       placeholder="Calculus: Early Transcendentals, 9th ed">
+            </div>
+
+            <div class="field">
+                <label for="listing-description">Description</label>
+                <textarea name="description" id="listing-description" data-role="none" rows="4" maxlength="2000"
+                          placeholder="Condition, edition, pickup spot and times."></textarea>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="listing-price">Price (AUD)</label>
+                    <div class="input-prefix">
+                        <span class="input-prefix__mark" aria-hidden="true">$</span>
+                        <input type="number" name="price" id="listing-price" data-role="none" required
+                               min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="listing-category">Category</label>
+                    <div class="select">
+                        <select name="category" id="listing-category" data-role="none" required>
+                            <option value="">Choose one</option>
+                            <option value="textbooks">Textbooks</option>
+                            <option value="furniture">Furniture</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <svg class="icon select__caret" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <span class="field__label" id="listing-photo-label">Photo</span>
+                <div class="photo" role="group" aria-labelledby="listing-photo-label">
+                    <img id="listing-photo-preview" class="photo__preview" alt="Listing photo preview" hidden>
+                    <div class="photo__empty" id="listing-photo-empty">
+                        <svg class="icon" aria-hidden="true"><use xlink:href="#i-image"></use></svg>
+                        <p>Listings with a photo sell faster.</p>
+                    </div>
+                    <div class="photo__actions">
+                        <button type="button" id="listing-photo-camera" data-role="none" class="btn btn--sm">
+                            <svg class="icon" aria-hidden="true"><use xlink:href="#i-camera"></use></svg>
+                            <span class="btn__label">Take photo</span>
+                        </button>
+                        <button type="button" id="listing-photo-remove" data-role="none" class="btn btn--ghost btn--sm" hidden>
+                            <span class="btn__label">Remove</span>
+                        </button>
+                    </div>
+                    <input type="file" id="listing-photo-file" data-role="none" accept="image/*" capture="environment" class="visually-hidden">
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="listing-photo">Photo link</label>
+                <div class="input-prefix">
+                    <svg class="icon input-prefix__mark" aria-hidden="true"><use xlink:href="#i-link"></use></svg>
+                    <input type="text" name="photo" id="listing-photo" data-role="none"
+                           autocapitalize="off" spellcheck="false" placeholder="https://… or data:image/…"
+                           aria-describedby="listing-photo-hint">
+                </div>
+                <p class="field__hint" id="listing-photo-hint">Optional if you took a photo above.</p>
+            </div>
+
+            <button type="submit" id="listing-submit" data-role="none" class="btn btn--primary btn--block btn--lg">
+                <span class="btn__label">Save listing</span>
+            </button>
+        </form>
+
+        <div id="form-delete-wrap" class="danger-zone" hidden>
+            <button type="button" id="listing-delete" data-role="none" class="btn btn--danger btn--block">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-trash"></use></svg>
+                <span class="btn__label">Delete listing</span>
+            </button>
+        </div>
+    </div>
+
+    <div data-ss-tabbar="sell"></div>
+</div>

@@ -1,0 +1,93 @@
+/* ==========================================================================
+   App bar
+   ========================================================================== */
+
+.app-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  height: calc(var(--bar-h) + var(--safe-t));
+  /* Match the centred content column instead of hugging a wide window. */
+  padding: var(--safe-t) max(var(--s3), calc((100% - var(--measure)) / 2 + var(--s1))) 0;
+  background-color: var(--bg-chrome);
+  border-bottom: 1px solid var(--line);
+}
+
+.app-bar__slot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0 0 44px;
+}
+
+.app-bar__slot--end {
+  justify-content: flex-end;
+}
+
+.app-bar .ui-title,
+.app-bar h1 {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-bar__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(150deg, var(--accent) 0%, var(--ctp-blue) 130%);
+  color: var(--accent-ink);
+  font-size: 15px;
+  box-shadow: var(--sh-sm);
+}
+
+.ui-page .icon-btn,
+.ui-page .icon-btn:visited {
+  color: var(--fg);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  font-size: 17px;
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-full);
+  cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease);
+}
+
+.ui-page .icon-btn:hover,
+.ui-page .icon-btn:focus-visible {
+  background-color: rgba(205, 214, 244, 0.08);
+  color: var(--fg);
+}
+
+.icon-btn:active {
+  background-color: rgba(205, 214, 244, 0.14);
+}
+

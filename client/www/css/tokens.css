@@ -1,0 +1,100 @@
+/* ==========================================================================
+   StudySwap — application theme.
+
+   Built on Catppuccin Mocha. jQuery Mobile keeps the page/transition system;
+   every control carries data-role="none" so jQM leaves it native and the
+   styling below owns it outright, instead of fighting jQM's swatch selectors
+   with !important. The handful of .ui-* rules here neutralise the framework
+   chrome we deliberately replace (bars, content box, page background).
+   ========================================================================== */
+
+:root {
+  /* ---- Catppuccin Mocha ---- */
+  --ctp-rosewater: #f5e0dc;
+  --ctp-mauve: #cba6f7;
+  --ctp-red: #f38ba8;
+  --ctp-maroon: #eba0ac;
+  --ctp-peach: #fab387;
+  --ctp-yellow: #f9e2af;
+  --ctp-green: #a6e3a1;
+  --ctp-teal: #94e2d5;
+  --ctp-sky: #89dceb;
+  --ctp-blue: #89b4fa;
+  --ctp-lavender: #b4befe;
+  --ctp-text: #cdd6f4;
+  --ctp-subtext1: #bac2de;
+  --ctp-subtext0: #a6adc8;
+  --ctp-overlay2: #9399b2;
+  --ctp-overlay1: #7f849c;
+  --ctp-overlay0: #6c7086;
+  --ctp-surface2: #585b70;
+  --ctp-surface1: #45475a;
+  --ctp-surface0: #313244;
+  --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825;
+  --ctp-crust: #11111b;
+
+  /* ---- Elevation ladder: page is deepest, cards lift, fields sink ---- */
+  --bg: var(--ctp-crust);
+  --bg-chrome: var(--ctp-crust);
+  --card: var(--ctp-base);
+  --card-hover: #252537;
+  --field: var(--ctp-mantle);
+  --line: #262636;
+  --line-strong: var(--ctp-surface0);
+
+  /* ---- Ink ---- */
+  --fg: var(--ctp-text);          /* 12.9:1 on --bg   */
+  --fg-muted: var(--ctp-subtext0); /*  7.4:1 on --card */
+  --fg-dim: var(--ctp-overlay2);   /*  6.2:1 on --field */
+
+  /* ---- Accent ---- */
+  --accent: var(--ctp-mauve);
+  --accent-hi: #d9bcf9;
+  --accent-lo: #b48eef;
+  --accent-ink: var(--ctp-crust);  /* 9.2:1 on --accent */
+  --accent-wash: rgba(203, 166, 247, 0.12);
+  --price: var(--ctp-peach);
+  --danger: var(--ctp-red);
+  --danger-wash: rgba(243, 139, 168, 0.12);
+  --focus: var(--ctp-lavender);
+
+  /* ---- Space (4px scale) ---- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s7: 32px;
+  --s8: 40px;
+  --s9: 56px;
+
+  /* ---- Radius ---- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-full: 999px;
+
+  /* ---- Depth: every shadow carries an offset and a soft blur ---- */
+  --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --sh-md: 0 6px 16px -4px rgba(0, 0, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.35);
+  --sh-lg: 0 18px 44px -12px rgba(0, 0, 0, 0.7), 0 4px 10px rgba(0, 0, 0, 0.4);
+
+  /* ---- Type ---- */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+
+  /* ---- Layout ---- */
+  --bar-h: 56px;
+  --tab-h: 58px;
+  --measure: 640px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+
+  /* ---- Motion: exponential ease-out ---- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 120ms;
+  --t-base: 220ms;
+}

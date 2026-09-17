@@ -1,0 +1,84 @@
+/* ==========================================================================
+   jQuery Mobile neutralisation
+   ========================================================================== */
+
+.ui-page,
+.ui-page-theme-a,
+.ui-mobile-viewport {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  text-shadow: none;
+}
+
+.ui-page {
+  outline: none;
+}
+
+.ui-content {
+  padding: var(--s5) var(--s4) calc(var(--s8) + var(--tab-h) + var(--safe-b));
+  margin: 0 auto;
+  max-width: var(--measure);
+  border: 0;
+  overflow: visible;
+}
+
+/* Pages with an app bar clear it; auth pages have none. */
+#page-browse .ui-content,
+#page-detail .ui-content,
+#page-form .ui-content,
+#page-profile .ui-content {
+  padding-top: calc(var(--bar-h) + var(--safe-t) + var(--s4));
+}
+
+.page-auth .ui-content {
+  padding-bottom: calc(var(--s8) + var(--safe-b));
+}
+
+.ui-page a,
+.ui-page a:visited {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.ui-page a:hover {
+  color: var(--accent-hi);
+}
+
+/* jQM's bar gradients, borders and text shadows are replaced wholesale. */
+.ui-bar-a,
+.ui-body-a,
+.ui-header,
+.ui-footer {
+  background: none;
+  background-color: transparent;
+  border: 0;
+  color: inherit;
+  text-shadow: none;
+  font-weight: inherit;
+}
+
+/* Every control here opts out with data-role="none". This is the backstop for
+   any that slips through (jQM forces button.ui-btn { width: 100% }, which
+   stretches chips and icon buttons across the row). */
+.btn.ui-btn,
+.chip.ui-btn,
+.tab.ui-btn,
+.icon-btn.ui-btn,
+.searchbar__clear.ui-btn {
+  width: auto;
+  margin: 0;
+  background-image: none;
+  text-shadow: none;
+  font-size: inherit;
+  box-shadow: none;
+}
+
+.btn.ui-btn::after,
+.chip.ui-btn::after,
+.tab.ui-btn::after,
+.icon-btn.ui-btn::after,
+.searchbar__clear.ui-btn::after {
+  display: none;
+}
+

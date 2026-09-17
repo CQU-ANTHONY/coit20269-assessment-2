@@ -1,0 +1,27 @@
+/* ==========================================================================
+   Icons — one stroke set, sized by font-size, coloured by currentColor
+   ========================================================================== */
+
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+  overflow: visible;
+}
+
+.icon > use {
+  /* <use> of a <g> inherits the presentation attributes above. */
+  pointer-events: none;
+}
+
+.icon-sprite g,
+.icon svg {
+  fill: none;
+}
+

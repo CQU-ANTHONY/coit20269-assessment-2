@@ -23,7 +23,7 @@ Applies to all code in this repo. JavaScript only — no TypeScript, no build/tr
 
 - kebab-case for all files: `user-router.js`, `auth-middleware.js`, `listing-model.js`
 - Express routers live in `server/src/routers/`, middleware in `server/src/middleware/`, models in `server/src/models/`
-- Client scripts in `client/www/js/`, styles in `client/www/css/`
+- Client scripts in `client/www/js/`, styles in `client/www/css/`, HTML fragments in `client/www/components/`
 
 ## Server Patterns
 
@@ -78,7 +78,13 @@ Auth goes through Passport strategies defined in `server/src/config/passport.js`
 - One JS file per page/feature in `client/www/js/`, loaded via `<script>` at end of body
 - All server calls via `fetch` over HTTPS; API base URL from a single config constant
 - Store JWT in `localStorage` under key `studyswap_token`; attach as `Authorization: Bearer <token>`
-- jQuery Mobile multi-page structure (`data-role="page"` divs) in `index.html`
+- **HTML components:** `index.html` is a thin shell. Page and shared markup lives in
+  `client/www/components/` (`page-*.html`, `icon-sprite.html`, `toast.html`,
+  `partial-tabbar.html`). `js/boot.js` loads them, expands `[data-ss-tabbar]`, then
+  calls `$.mobile.initializePage()` (`autoInitializePage` is false in `mobileinit`).
+- **CSS components:** `css/studyswap.css` is an `@import` barrel; feature styles live
+  in sibling files (`tokens.css`, `buttons.css`, `cards.css`, …). No build step.
+- Page scripts bind with delegated `$(document).on(...)` so they work after async mount.
 
 ## Git
 

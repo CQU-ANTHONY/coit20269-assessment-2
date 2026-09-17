@@ -1,0 +1,37 @@
+<!-- ============ LOGIN (#page-login) ============ -->
+<div data-role="page" id="page-login" data-theme="a" class="page-auth">
+    <div role="main" class="ui-content">
+        <div class="auth">
+            <div class="brand">
+                <span class="brand__mark"><svg class="icon" aria-hidden="true"><use xlink:href="#i-logo"></use></svg></span>
+                <span class="brand__word">StudySwap</span>
+            </div>
+
+            <h1 class="auth__title">Welcome back</h1>
+            <p class="auth__sub">Buy and sell second-hand gear with students on your campus.</p>
+
+            <form id="form-login" data-ajax="false" class="form" novalidate>
+                <div class="field">
+                    <label for="login-email">Email</label>
+                    <input type="email" name="email" id="login-email" data-role="none" required
+                           autocomplete="email" autocapitalize="off" spellcheck="false"
+                           placeholder="you@student.cqu.edu.au">
+                </div>
+
+                <div class="field">
+                    <label for="login-password">Password</label>
+                    <input type="password" name="password" id="login-password" data-role="none" required
+                           autocomplete="current-password" minlength="8" placeholder="••••••••">
+                </div>
+
+                <button type="submit" id="login-submit" data-role="none" class="btn btn--primary btn--block btn--lg">
+                    <span class="btn__label">Log in</span>
+                </button>
+            </form>
+
+            <p class="auth__switch">
+                New to StudySwap? <a href="#page-signup">Create an account</a>
+            </p>
+        </div>
+    </div>
+</div>
