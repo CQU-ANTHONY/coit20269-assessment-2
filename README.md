@@ -44,6 +44,8 @@ General-purpose marketplaces (Gumtree, Facebook Marketplace) and student sites (
 - **Deployment:** Render (server), Cordova/Android (app)
 - **Version control:** GitHub
 
+Full package inventory (npm + Cordova + vendored libs): **[docs/packages.md](docs/packages.md)**.
+
 ## Features
 
 - Sign-up, login, logout (JWT-authenticated)

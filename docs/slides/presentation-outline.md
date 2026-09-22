@@ -19,6 +19,7 @@ Yavik Dayaram · Thi My Linh Huynh · John Anthony Hosenilla Naui
 - Motivation — who uses StudySwap and why
 - High-level user requirements — needs from the user’s view
 - Software architecture — three-tier hybrid stack
+- Packages & libraries — Node.js, Cordova, vendored UI
 - Test results (preliminary) — screenshots / flows (#6 follow-up)
 - Vulnerability analysis (preliminary) — identify & report only
 - Live demo (device / emulator / browser)
@@ -107,10 +108,22 @@ Full table: `docs/vulnerability-analysis.md`
 
 ---
 
-## Slide 10 — Demo & questions
+## Slide 10 — Packages & libraries
+
+**Server (npm):** express, mongoose, passport (+ local/JWT), jsonwebtoken, bcrypt, cors, dotenv · Dev: vitest, supertest, nodemon, oxlint/oxfmt  
+
+**Cordova (npm):** cordova CLI, cordova-android, cordova-plugin-camera  
+
+**Client (vendored):** jQuery 2.2.4, jQuery Mobile 1.4.5 under `www/lib/`  
+
+Full inventory: `docs/packages.md`
+
+---
+
+## Slide 11 — Demo & questions
 
 Live demo → then questions from the tutor.  
 Each member should be ready to explain their owned code.
 
 Repo: `client/` · `server/` · `docs/`  
-Sources: user-stories, api-contract, vulnerability-analysis
+Sources: user-stories, api-contract, packages, vulnerability-analysis
