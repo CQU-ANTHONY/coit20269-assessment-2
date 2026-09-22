@@ -13,6 +13,7 @@ This folder holds the Week 12 PowerPoint deck (#5). Content is drawn from existi
 | Software architecture | 5–6 | README architecture, [api-contract.md](../api-contract.md) |
 | Test results (preliminary) | 7–8 | Placeholders for #6 screenshots; Vitest/CI + manual flows |
 | Vulnerability analysis | 9 | [vulnerability-analysis.md](../vulnerability-analysis.md) |
+| Packages & libraries | 10 | [packages.md](../packages.md) |
 
 ## Regenerating the `.pptx`
 
@@ -61,5 +62,8 @@ API tests in CI; manual Compose/browser; placeholders until screenshots land.
 ### 9 — Vulnerabilities
 Report only. V-01 localStorage JWT; open CORS / no rate limit; self-signed lab TLS; unescaped `$regex`; non-revoking logout. Mitigations: bcrypt, env secrets, owner checks, FE escaping.
 
-### 10 — Demo & questions
+### 10 — Packages & libraries
+Server npm (Express, Mongoose, Passport, JWT, bcrypt, cors, dotenv + Vitest tooling). Cordova (android + camera plugin). Vendored jQuery / jQuery Mobile. Full list: `docs/packages.md`.
+
+### 11 — Demo & questions
 Each member must explain their owned code (tutor may quiz individuals).

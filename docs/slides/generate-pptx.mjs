@@ -69,7 +69,7 @@ function addBg(slide) {
   });
 }
 
-function addFooter(slide, page, total = 10) {
+function addFooter(slide, page, total = 11) {
   slide.addText("StudySwap · COIT20269 · Group D", {
     x: 0.5,
     y: 7.05,
@@ -198,6 +198,7 @@ function bullets(slide, items, opts = {}) {
     "Motivation — who uses StudySwap and why",
     "High-level user requirements — needs from the user’s view",
     "Software architecture — three-tier hybrid stack",
+    "Packages & libraries — Node.js, Cordova, vendored UI",
     "Test results (preliminary) — screenshots / flows (#6 follow-up)",
     "Vulnerability analysis (preliminary) — identify & report only",
     "Live demo (device / emulator / browser)",
@@ -458,7 +459,104 @@ function bullets(slide, items, opts = {}) {
   );
 }
 
-// ----- 10. Closing -----
+// ----- 10. Packages -----
+{
+  const s = pptx.addSlide();
+  addBg(s);
+  titleBar(
+    s,
+    "Packages & libraries",
+    "Node.js packages · Cordova · vendored UI (docs/packages.md)",
+  );
+
+  // Three columns
+  const cols = [
+    {
+      x: 0.5,
+      title: "Server (npm)",
+      color: C.accent,
+      lines: [
+        "express · mongoose",
+        "passport + local/JWT",
+        "jsonwebtoken · bcrypt",
+        "cors · dotenv",
+        "Dev: vitest, supertest,",
+        "nodemon, oxlint/oxfmt",
+      ],
+    },
+    {
+      x: 4.7,
+      title: "Cordova (npm)",
+      color: C.accent2,
+      lines: [
+        "cordova (CLI)",
+        "cordova-android",
+        "cordova-plugin-camera",
+        "",
+        "Listing photos on",
+        "device / emulator",
+      ],
+    },
+    {
+      x: 8.9,
+      title: "Client (vendored)",
+      color: C.peach,
+      lines: [
+        "jQuery 2.2.4",
+        "jQuery Mobile 1.4.5",
+        "(under www/lib/)",
+        "",
+        "No transpile step",
+        "for day-to-day UI",
+      ],
+    },
+  ];
+
+  cols.forEach((col) => {
+    s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+      x: col.x,
+      y: 1.45,
+      w: 3.9,
+      h: 5.1,
+      fill: { color: C.card },
+      rectRadius: 0.08,
+    });
+    s.addShape(pptx.shapes.RECTANGLE, {
+      x: col.x,
+      y: 1.45,
+      w: 3.9,
+      h: 0.12,
+      fill: { color: col.color },
+    });
+    s.addText(col.title, {
+      x: col.x + 0.2,
+      y: 1.7,
+      w: 3.5,
+      h: 0.45,
+      fontSize: 18,
+      bold: true,
+      color: col.color,
+      fontFace: "Calibri",
+    });
+    s.addText(col.lines.filter(Boolean).join("\n"), {
+      x: col.x + 0.2,
+      y: 2.3,
+      w: 3.5,
+      h: 3.9,
+      fontSize: 15,
+      color: C.text,
+      fontFace: "Calibri",
+      valign: "top",
+    });
+  });
+
+  addFooter(s, 10);
+  s.addNotes(
+    "Assignment values Cordova plugins and Node packages. Point to docs/packages.md for the full table. Emphasize camera plugin + Passport/bcrypt/JWT/Mongoose as the main extras.",
+  );
+}
+
+// ----- 11. Closing -----
 {
   const s = pptx.addSlide();
   addBg(s);
@@ -492,7 +590,7 @@ function bullets(slide, items, opts = {}) {
     },
   );
   s.addText(
-    "Repo: client/ · server/ · docs/   |   Sources: user-stories, api-contract, vulnerability-analysis",
+    "Repo: client/ · server/ · docs/   |   Sources: user-stories, api-contract, packages, vulnerability-analysis",
     {
       x: 0.8,
       y: 5.2,
@@ -503,7 +601,7 @@ function bullets(slide, items, opts = {}) {
       fontFace: "Calibri",
     },
   );
-  addFooter(s, 10);
+  addFooter(s, 11);
   s.addNotes(
     "Handoff to demo. John: lead/docs/BE-FE; Yavik: Atlas/Render; Linh: app shell/theme. Reminder: understanding is assessed individually.",
   );
