@@ -3,3 +3,9 @@
     <a href="#page-form" data-role="none" class="tab js-new-listing" data-tab="sell"><svg class="icon" aria-hidden="true"><use xlink:href="#i-sell"></use></svg><span>Sell</span></a>
     <a href="#page-profile" data-role="none" class="tab" data-tab="profile"><svg class="icon" aria-hidden="true"><use xlink:href="#i-user"></use></svg><span>Profile</span></a>
 </div>
+
+<!-- Dev servers with live reload (VS Code/Cursor Live Server) inject their script
+     before </body>, or before every </svg> when there is none, and then cut the
+     response short. This end tag gives them one safe spot; the fragment parser
+     ignores it when boot.js mounts the page. -->
+</body>
