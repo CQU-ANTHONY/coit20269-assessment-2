@@ -90,3 +90,37 @@
   font-weight: 600;
 }
 
+
+/* Short viewports (laptop windows, landscape phones): start at the top and
+   tighten the vertical rhythm so the submit button stays above the fold. */
+@media (max-height: 700px) {
+  .page-auth .ui-content {
+    align-items: flex-start;
+  }
+
+  .auth {
+    padding: var(--s4) 0;
+  }
+
+  .auth__back,
+  .brand {
+    margin-bottom: var(--s5);
+  }
+
+  .auth__title {
+    font-size: 24px;
+  }
+
+  .auth__sub {
+    margin-bottom: var(--s5);
+  }
+
+  .auth .field {
+    margin-bottom: var(--s4);
+  }
+
+  .auth #login-submit,
+  .auth #signup-submit {
+    margin-top: var(--s5);
+  }
+}

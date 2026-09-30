@@ -57,3 +57,9 @@
         </div>
     </div>
 </div>
+
+<!-- Dev servers with live reload (VS Code/Cursor Live Server) inject their script
+     before </body>, or before every </svg> when there is none, and then cut the
+     response short. This end tag gives them one safe spot; the fragment parser
+     ignores it when boot.js mounts the page. -->
+</body>
