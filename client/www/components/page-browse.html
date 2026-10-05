@@ -30,7 +30,18 @@
 
         <div class="results-bar">
             <p class="results-bar__count" id="browse-count" aria-live="polite"></p>
-            <button type="button" id="browse-refresh" data-role="none" class="btn btn--ghost btn--sm">Refresh</button>
+            <div class="results-bar__actions">
+                <label for="browse-sort" class="visually-hidden">Sort listings</label>
+                <div class="select select--sm">
+                    <select name="sort" id="browse-sort" data-role="none">
+                        <option value="newest">Newest</option>
+                        <option value="price_asc">Price: low to high</option>
+                        <option value="price_desc">Price: high to low</option>
+                    </select>
+                    <svg class="icon select__caret" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                </div>
+                <button type="button" id="browse-refresh" data-role="none" class="btn btn--ghost btn--sm">Refresh</button>
+            </div>
         </div>
 
         <ul id="browse-list" class="cards" aria-busy="false"></ul>

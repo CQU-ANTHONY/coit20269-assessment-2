@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * Browse page (#page-browse) — GET /listings with category + search filters.
+ * Browse page (#page-browse) — GET /listings with category, search and sort.
  * Tapping a card stores the listing id and opens #page-detail.
  *
  * Category comes from the chip row, which writes the selected value into the
@@ -21,6 +21,7 @@
   function buildPath() {
     var category = $("#browse-category").val() || "";
     var q = String($("#browse-search").val() || "").trim();
+    var sort = $("#browse-sort").val() || "newest";
     var params = [];
 
     if (category) {
@@ -28,6 +29,9 @@
     }
     if (q) {
       params.push("q=" + encodeURIComponent(q));
+    }
+    if (sort !== "newest") {
+      params.push("sort=" + encodeURIComponent(sort));
     }
     return "listings" + (params.length ? "?" + params.join("&") : "");
   }
@@ -129,6 +133,10 @@
     $("#browse-chips .chip").removeClass("is-active");
     $chip.addClass("is-active");
     $("#browse-category").val($chip.attr("data-category") || "");
+    loadListings();
+  });
+
+  $(document).on("change", "#browse-sort", function () {
     loadListings();
   });
 

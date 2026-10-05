@@ -172,3 +172,24 @@
   font-variant-numeric: tabular-nums;
 }
 
+
+.results-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  min-width: 0;
+}
+
+.ui-content .select--sm select {
+  width: auto;
+  min-height: 36px;
+  padding: 0 calc(var(--s3) + 20px) 0 var(--s3);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--r-sm);
+}
+
+.select--sm .select__caret {
+  right: var(--s3);
+  font-size: 11px;
+}
