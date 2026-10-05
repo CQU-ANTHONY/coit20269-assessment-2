@@ -176,3 +176,40 @@
   padding-left: calc(var(--s4) + 22px);
 }
 
+
+/* ---- Password reveal ---- */
+
+.input-reveal {
+  position: relative;
+}
+
+.ui-content .input-reveal input {
+  padding-right: calc(var(--s2) + 40px);
+}
+
+.input-reveal__toggle {
+  position: absolute;
+  top: 50%;
+  right: var(--s1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 16px;
+  color: var(--fg-dim);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-md);
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition:
+    color var(--t-fast) var(--ease),
+    background-color var(--t-fast) var(--ease);
+}
+
+.input-reveal__toggle:hover {
+  color: var(--fg);
+  background-color: rgba(205, 214, 244, 0.08);
+}

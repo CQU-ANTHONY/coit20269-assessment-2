@@ -20,8 +20,14 @@
 
                 <div class="field">
                     <label for="login-password">Password</label>
-                    <input type="password" name="password" id="login-password" data-role="none" required
-                           autocomplete="current-password" minlength="8" placeholder="••••••••">
+                    <div class="input-reveal">
+                        <input type="password" name="password" id="login-password" data-role="none" required
+                               autocomplete="current-password" minlength="8" placeholder="••••••••">
+                        <button type="button" data-role="none" class="input-reveal__toggle" aria-controls="login-password"
+                                aria-label="Show password" aria-pressed="false">
+                            <svg class="icon" aria-hidden="true"><use xlink:href="#i-eye"></use></svg>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" id="login-submit" data-role="none" class="btn btn--primary btn--block btn--lg">
