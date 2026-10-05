@@ -76,6 +76,7 @@ Query params:
 - `category` — one of the enum values
 - `status` — `active` (default) or `sold`
 - `q` — case-insensitive search in title/description
+- `sort` — `newest` (default), `price_asc` or `price_desc`; unknown values fall back to `newest`
 - `limit` — max results (default 50, max 100)
 - `skip` — offset for paging
 
