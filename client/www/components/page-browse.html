@@ -1,0 +1,61 @@
+<!-- ============ BROWSE (#page-browse) ============ -->
+<div data-role="page" id="page-browse" data-theme="a">
+    <div data-role="header" data-theme="a" class="app-bar">
+        <div class="app-bar__slot">
+            <span class="app-bar__mark"><svg class="icon" aria-hidden="true"><use xlink:href="#i-logo"></use></svg></span>
+        </div>
+        <h1>Browse</h1>
+        <div class="app-bar__slot app-bar__slot--end"></div>
+    </div>
+
+    <div role="main" class="ui-content">
+        <form class="searchbar" id="browse-searchbar" data-ajax="false" role="search">
+            <svg class="icon searchbar__icon" aria-hidden="true"><use xlink:href="#i-search"></use></svg>
+            <input type="search" name="q" id="browse-search" data-role="none" class="searchbar__input"
+                   placeholder="Search titles and descriptions" autocapitalize="off" spellcheck="false"
+                   aria-label="Search listings">
+            <button type="button" id="browse-clear" data-role="none" class="searchbar__clear" aria-label="Clear search" hidden>
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-plus"></use></svg>
+            </button>
+        </form>
+
+        <input type="hidden" name="category" id="browse-category" value="">
+        <div class="chips" id="browse-chips" role="group" aria-label="Filter by category">
+            <button type="button" data-role="none" class="chip is-active" data-category="">All</button>
+            <button type="button" data-role="none" class="chip" data-category="textbooks">Textbooks</button>
+            <button type="button" data-role="none" class="chip" data-category="furniture">Furniture</button>
+            <button type="button" data-role="none" class="chip" data-category="electronics">Electronics</button>
+            <button type="button" data-role="none" class="chip" data-category="other">Other</button>
+        </div>
+
+        <div class="results-bar">
+            <p class="results-bar__count" id="browse-count" aria-live="polite"></p>
+            <div class="results-bar__actions">
+                <label for="browse-sort" class="visually-hidden">Sort listings</label>
+                <div class="select select--sm">
+                    <select name="sort" id="browse-sort" data-role="none">
+                        <option value="newest">Newest</option>
+                        <option value="price_asc">Price: low to high</option>
+                        <option value="price_desc">Price: high to low</option>
+                    </select>
+                    <svg class="icon select__caret" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                </div>
+                <button type="button" id="browse-refresh" data-role="none" class="btn btn--ghost btn--sm btn--icon"
+                        aria-label="Refresh listings" title="Refresh">
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#i-refresh"></use></svg>
+                </button>
+            </div>
+        </div>
+
+        <ul id="browse-list" class="cards" aria-busy="false"></ul>
+        <div id="browse-empty" class="state" hidden></div>
+    </div>
+
+    <div data-ss-tabbar="browse"></div>
+</div>
+
+<!-- Dev servers with live reload (VS Code/Cursor Live Server) inject their script
+     before </body>, or before every </svg> when there is none, and then cut the
+     response short. This end tag gives them one safe spot; the fragment parser
+     ignores it when boot.js mounts the page. -->
+</body>

@@ -1,0 +1,14 @@
+<!-- ============ TOAST (used by api.js) ============
+     Plain element, not a jQM popup: a status message must not take an overlay
+     or steal focus the way a dialog does.
+-->
+<div id="toast-popup" class="toast" role="status" aria-live="polite" hidden>
+    <svg class="icon toast__icon" aria-hidden="true"><use xlink:href="#i-check"></use></svg>
+    <p id="toast-text" class="toast__text"></p>
+</div>
+
+<!-- Dev servers with live reload (VS Code/Cursor Live Server) inject their script
+     before </body>, or before every </svg> when there is none, and then cut the
+     response short. This end tag gives them one safe spot; the fragment parser
+     ignores it when boot.js mounts the page. -->
+</body>

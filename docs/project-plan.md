@@ -35,10 +35,11 @@ All members commit to GitHub throughout (version control is worth 2 marks — co
 - [ ] README/setup docs finalised
 
 ### Week 12 — Presentation & Submission
-- [ ] PowerPoint: motivation, user requirements, architecture diagram, test results, vulnerability results
+- [x] PowerPoint: motivation, user requirements, architecture diagram, test results, vulnerability results (`docs/slides/`)
 - [ ] Live demo rehearsal (device/emulator)
 - [ ] Package zip: slides + all code
 - [ ] Each member uploads same copy to Moodle
+- [ ] Test screenshots pasted into deck (#6)
 
 ## Mark-Critical Checklist
 

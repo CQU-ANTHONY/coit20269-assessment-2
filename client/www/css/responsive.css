@@ -1,0 +1,63 @@
+/* ==========================================================================
+   Responsive — the phone is the design target; wider screens get room
+   ========================================================================== */
+
+@media (min-width: 560px) {
+  :root {
+    --measure: 680px;
+  }
+
+  .ui-content {
+    padding-left: var(--s6);
+    padding-right: var(--s6);
+  }
+
+  .chips {
+    margin-left: calc(var(--s6) * -1);
+    margin-right: calc(var(--s6) * -1);
+    padding-left: var(--s6);
+    padding-right: var(--s6);
+  }
+
+  .card__link {
+    grid-template-columns: 96px minmax(0, 1fr);
+    padding: var(--s4);
+  }
+
+  .card__thumb {
+    width: 96px;
+    height: 96px;
+  }
+
+  .card__title {
+    font-size: 16.5px;
+  }
+
+  .detail-head__title {
+    font-size: 28px;
+  }
+
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .actions .btn--block {
+    flex: 1 1 160px;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .card__link:hover {
+    transform: none;
+  }
+}

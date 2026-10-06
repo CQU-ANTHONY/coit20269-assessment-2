@@ -1,0 +1,323 @@
+"use strict";
+
+/**
+ * Listing create / edit / delete form (#page-form).
+ *
+ * sessionStorage keys:
+ *   studyswap_edit_listing_id — if set, page is edit mode (GET listings/:id, PUT on save).
+ *     Cleared after a successful save or delete. Unset = create mode (POST).
+ *   studyswap_selected_listing_id — set after save so #16 detail can open the listing.
+ */
+
+(function () {
+  var EDIT_KEY = "studyswap_edit_listing_id";
+  var CATEGORIES = ["textbooks", "furniture", "electronics", "other"];
+
+  /** @type {string|null} */
+  var editingId = null;
+
+  /** Cordova camera plugin is available after `deviceready`. Browser skips wait. */
+  var deviceReady = !window.cordova;
+
+  document.addEventListener(
+    "deviceready",
+    function () {
+      deviceReady = true;
+    },
+    false,
+  );
+
+  function setModeUi(isEdit) {
+    $("#form-page-title").text(isEdit ? "Edit listing" : "New listing");
+    $("#listing-submit")
+      .find(".btn__label")
+      .text(isEdit ? "Save changes" : "Save listing");
+    $("#form-delete-wrap").prop("hidden", !isEdit);
+  }
+
+  function clearEditKey() {
+    sessionStorage.removeItem(EDIT_KEY);
+    editingId = null;
+    if (window.StudySwap) {
+      window.StudySwap.editListingId = null;
+    }
+  }
+
+  /** Put the page into create mode right now, whether or not it is visible. */
+  function startNewListing() {
+    clearEditKey();
+    setModeUi(false);
+    resetForm();
+  }
+
+  /** Preview, prompt and Remove are one three-state block: keep them in sync. */
+  function updatePhotoPreview(src) {
+    var has = !!src;
+    $("#listing-photo-preview")
+      .attr("src", has ? src : "")
+      .prop("hidden", !has);
+    $("#listing-photo-empty").prop("hidden", has);
+    $("#listing-photo-remove").prop("hidden", !has);
+    $("#listing-photo-camera")
+      .find(".btn__label")
+      .text(has ? "Replace photo" : "Take photo");
+  }
+
+  function resetForm() {
+    var form = document.getElementById("form-listing");
+    if (form) {
+      form.reset();
+    }
+    updatePhotoPreview("");
+  }
+
+  function populateForm(listing) {
+    $("#listing-title").val(listing.title || "");
+    $("#listing-description").val(listing.description || "");
+    $("#listing-price").val(
+      listing.price !== undefined && listing.price !== null ? listing.price : "",
+    );
+    $("#listing-category").val(listing.category || "");
+    $("#listing-photo").val(listing.photo || "");
+    updatePhotoPreview(listing.photo || "");
+  }
+
+  function validateAndBuildBody() {
+    var title = String($("#listing-title").val() || "").trim();
+    var description = String($("#listing-description").val() || "").trim();
+    var priceRaw = String($("#listing-price").val() || "").trim();
+    var category = String($("#listing-category").val() || "").trim();
+    var photo = String($("#listing-photo").val() || "").trim();
+
+    if (!title) {
+      toast("Title is required");
+      return null;
+    }
+    if (priceRaw === "") {
+      toast("Price is required");
+      return null;
+    }
+    var price = Number(priceRaw);
+    if (!isFinite(price) || price < 0) {
+      toast("Price must be a number zero or greater");
+      return null;
+    }
+    if (!category || CATEGORIES.indexOf(category) === -1) {
+      toast("Choose a valid category");
+      return null;
+    }
+
+    var body = {
+      title: title,
+      description: description,
+      price: price,
+      category: category,
+    };
+    if (photo) {
+      body.photo = photo;
+    }
+    return body;
+  }
+
+  function goAfterSave(listing) {
+    clearEditKey();
+    resetForm();
+    if (listing && listing._id) {
+      // Shared with #16 detail.js (studyswap_selected_listing_id).
+      sessionStorage.setItem("studyswap_selected_listing_id", listing._id);
+      if (window.StudySwap) {
+        window.StudySwap.selectedListingId = listing._id;
+      }
+      window.location.hash = "#page-detail";
+    } else {
+      window.location.hash = "#page-browse";
+    }
+  }
+
+  function takePhoto() {
+    if (window.cordova && !deviceReady) {
+      toast("App still starting — try the camera again in a moment");
+      return;
+    }
+
+    var Camera = navigator.camera;
+    if (Camera && typeof Camera.getPicture === "function") {
+      var destType =
+        Camera.DestinationType && Camera.DestinationType.DATA_URL !== undefined
+          ? Camera.DestinationType.DATA_URL
+          : 0;
+      Camera.getPicture(
+        function (imageData) {
+          var dataUrl =
+            String(imageData).indexOf("data:") === 0
+              ? imageData
+              : "data:image/jpeg;base64," + imageData;
+          $("#listing-photo").val(dataUrl);
+          updatePhotoPreview(dataUrl);
+          toast("Photo attached");
+        },
+        function () {
+          toast("Could not take photo");
+        },
+        { quality: 50, destinationType: destType },
+      );
+      return;
+    }
+
+    var fileInput = document.getElementById("listing-photo-file");
+    if (fileInput && typeof fileInput.click === "function") {
+      toast("Camera not available here — choose a photo file instead");
+      fileInput.click();
+      return;
+    }
+
+    toast("Camera not available — paste a photo URL or data URL");
+  }
+
+  function readFileAsDataUrl(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        resolve(reader.result);
+      };
+      reader.onerror = function () {
+        reject({ message: "Could not read image file" });
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  $(document).on("pagebeforeshow", "#page-form", function () {
+    if (!requireAuth()) {
+      return;
+    }
+
+    editingId = sessionStorage.getItem(EDIT_KEY);
+
+    if (editingId) {
+      setModeUi(true);
+      apiFetch("listings/" + editingId)
+        .then(function (data) {
+          if (!data || !data.listing) {
+            throw { message: "Listing not found", status: 404 };
+          }
+          populateForm(data.listing);
+        })
+        .catch(function (err) {
+          toastError(err);
+          clearEditKey();
+          setModeUi(false);
+          resetForm();
+          window.location.hash = "#page-browse";
+        });
+    } else {
+      setModeUi(false);
+      resetForm();
+    }
+  });
+
+  // Every "new listing" entry point routes through here. The tab bar's Sell
+  // link is the case that matters: tapping it while #page-form is already
+  // showing changes no hash, so pagebeforeshow never fires — without this the
+  // form would keep the listing it was editing and "Save changes" would
+  // overwrite it instead of creating a new one.
+  $(document).on("click", ".js-new-listing", function () {
+    if ($.mobile.activePage && $.mobile.activePage.attr("id") === "page-form") {
+      startNewListing();
+    } else {
+      clearEditKey();
+    }
+  });
+
+  $(document).on("input change", "#listing-photo", function () {
+    updatePhotoPreview(String($(this).val() || "").trim());
+  });
+
+  $(document).on("click", "#listing-photo-camera", function (event) {
+    event.preventDefault();
+    takePhoto();
+  });
+
+  $(document).on("click", "#listing-photo-remove", function (event) {
+    event.preventDefault();
+    $("#listing-photo").val("");
+    updatePhotoPreview("");
+  });
+
+  $(document).on("change", "#listing-photo-file", function () {
+    var file = this.files && this.files[0];
+    if (!file) {
+      return;
+    }
+    readFileAsDataUrl(file)
+      .then(function (dataUrl) {
+        $("#listing-photo").val(dataUrl);
+        updatePhotoPreview(dataUrl);
+        toast("Photo attached");
+      })
+      .catch(toastError);
+    this.value = "";
+  });
+
+  $(document).on("submit", "#form-listing", function (event) {
+    event.preventDefault();
+
+    var body = validateAndBuildBody();
+    if (!body) {
+      return;
+    }
+
+    var $submit = $("#listing-submit");
+    window.StudySwap.setBusy($submit, true);
+
+    var request;
+    if (editingId) {
+      request = apiFetch("listings/" + editingId, {
+        method: "PUT",
+        body: body,
+        auth: true,
+      });
+    } else {
+      request = apiFetch("listings", {
+        method: "POST",
+        body: body,
+        auth: true,
+      });
+    }
+
+    request
+      .then(function (data) {
+        toast(editingId ? "Listing updated" : "Listing created");
+        goAfterSave(data && data.listing);
+      })
+      .catch(toastError)
+      .then(function () {
+        window.StudySwap.setBusy($submit, false);
+      });
+  });
+
+  $(document).on("click", "#listing-delete", function (event) {
+    event.preventDefault();
+    if (!editingId) {
+      return;
+    }
+    if (!window.confirm("Delete this listing? This cannot be undone.")) {
+      return;
+    }
+
+    var $btn = $("#listing-delete");
+    window.StudySwap.setBusy($btn, true);
+
+    apiFetch("listings/" + editingId, { method: "DELETE", auth: true })
+      .then(function () {
+        toast("Listing deleted");
+        clearEditKey();
+        resetForm();
+        window.location.hash = "#page-browse";
+      })
+      .catch(toastError)
+      .then(function () {
+        window.StudySwap.setBusy($btn, false);
+      });
+  });
+})();

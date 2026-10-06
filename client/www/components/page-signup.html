@@ -1,0 +1,71 @@
+<!-- ============ SIGNUP (#page-signup) ============ -->
+<div data-role="page" id="page-signup" data-theme="a" class="page-auth">
+    <div role="main" class="ui-content">
+        <div class="auth">
+            <a href="#page-login" data-rel="back" data-role="none" class="auth__back">
+                <svg class="icon" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                <span>Log in</span>
+            </a>
+
+            <h1 class="auth__title">Create your account</h1>
+            <p class="auth__sub">It takes about a minute. Your campus helps buyers find you.</p>
+
+            <form id="form-signup" data-ajax="false" class="form" novalidate>
+                <div class="field">
+                    <label for="signup-name">Name</label>
+                    <input type="text" name="name" id="signup-name" data-role="none" required
+                           autocomplete="name" maxlength="80" placeholder="Alex Nguyen">
+                </div>
+
+                <div class="field">
+                    <label for="signup-email">Email</label>
+                    <input type="email" name="email" id="signup-email" data-role="none" required
+                           autocomplete="email" autocapitalize="off" spellcheck="false"
+                           placeholder="you@student.cqu.edu.au">
+                </div>
+
+                <div class="field">
+                    <label for="signup-password">Password</label>
+                    <div class="input-reveal">
+                        <input type="password" name="password" id="signup-password" data-role="none" required
+                               autocomplete="new-password" minlength="8" placeholder="At least 8 characters"
+                               aria-describedby="signup-password-hint">
+                        <button type="button" data-role="none" class="input-reveal__toggle" aria-controls="signup-password"
+                                aria-label="Show password" aria-pressed="false">
+                            <svg class="icon" aria-hidden="true"><use xlink:href="#i-eye"></use></svg>
+                        </button>
+                    </div>
+                    <p class="field__hint" id="signup-password-hint">Use 8 characters or more.</p>
+                </div>
+
+                <div class="field">
+                    <label for="signup-campus">Campus</label>
+                    <div class="select">
+                        <select name="campus" id="signup-campus" data-role="none">
+                            <option value="other">Other / not listed</option>
+                            <option value="BNE">Brisbane (BNE)</option>
+                            <option value="SYD">Sydney (SYD)</option>
+                            <option value="MEL">Melbourne (MEL)</option>
+                            <option value="DST">Distance (DST)</option>
+                        </select>
+                        <svg class="icon select__caret" aria-hidden="true"><use xlink:href="#i-back"></use></svg>
+                    </div>
+                </div>
+
+                <button type="submit" id="signup-submit" data-role="none" class="btn btn--primary btn--block btn--lg">
+                    <span class="btn__label">Create account</span>
+                </button>
+            </form>
+
+            <p class="auth__switch">
+                Already have an account? <a href="#page-login">Log in</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Dev servers with live reload (VS Code/Cursor Live Server) inject their script
+     before </body>, or before every </svg> when there is none, and then cut the
+     response short. This end tag gives them one safe spot; the fragment parser
+     ignores it when boot.js mounts the page. -->
+</body>

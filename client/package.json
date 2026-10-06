@@ -1,0 +1,37 @@
+{
+  "name": "studyswap-client",
+  "displayName": "StudySwap",
+  "version": "1.0.0",
+  "description": "StudySwap — jQuery Mobile client + Cordova Android wrapper (vendored libs, no build step for www/).",
+  "private": true,
+  "scripts": {
+    "lint": "oxlint www/js",
+    "fmt": "oxfmt --write www/js",
+    "fmt:check": "oxfmt --check www/js",
+    "cordova": "cordova",
+    "platform:add:android": "cordova platform add android",
+    "plugin:add:camera": "cordova plugin add cordova-plugin-camera",
+    "build:android": "cordova build android",
+    "run:android": "cordova run android"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "devDependencies": {
+    "cordova": "^13.0.0",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0"
+  },
+  "dependencies": {
+    "cordova-android": "^15.1.0",
+    "cordova-plugin-camera": "^8.0.0"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-camera": {}
+    }
+  }
+}

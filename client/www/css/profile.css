@@ -1,0 +1,39 @@
+/* ==========================================================================
+   Profile
+   ========================================================================== */
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--s6) var(--s5);
+  margin-bottom: var(--s6);
+  background-color: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+}
+
+.profile__name {
+  margin: var(--s4) 0 var(--s3);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.profile__row {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin: 0 0 var(--s1);
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  word-break: break-word;
+}
+
+.profile__row .icon {
+  font-size: 14px;
+  color: var(--fg-dim);
+}
+

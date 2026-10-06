@@ -44,6 +44,8 @@ General-purpose marketplaces (Gumtree, Facebook Marketplace) and student sites (
 - **Deployment:** Render (server), Cordova/Android (app)
 - **Version control:** GitHub
 
+Full package inventory (npm + Cordova + vendored libs): **[docs/packages.md](docs/packages.md)**.
+
 ## Features
 
 - Sign-up, login, logout (JWT-authenticated)
@@ -108,13 +110,19 @@ npm run fmt:check   # oxfmt (CI-style check)
 
 ### Client
 
-Open `client/www/index.html` in a browser for development, or build with Cordova:
+Open `client/www/index.html` in a browser for day-to-day UI work (camera falls back to file pick).
+
+For the Cordova/Android app (camera plugin, Week 12 demo), see **[docs/cordova-setup.md](docs/cordova-setup.md)**. Short version:
 
 ```bash
 cd client
-cordova platform add android
-cordova run android
+npm install
+npx cordova platform add android
+npx cordova plugin add cordova-plugin-camera
+npx cordova run android
 ```
+
+`platforms/`, `plugins/`, and generated `www/cordova*.js` are gitignored — never commit them.
 
 ## License
 
