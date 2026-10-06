@@ -16,7 +16,8 @@
 // Dev default: docker compose maps the API container's port 3000 to host
 // port 3100 (see compose.yaml) and runs it over plain HTTP. On Render,
 // overridden in config step.
-var API_BASE = "http://localhost:3100/api";
+// var API_BASE = "http://localhost:3100/api";
+var API_BASE = "https://coit20269-assessment-2-bnzk.onrender.com/api";
 
 var TOKEN_KEY = "studyswap_token";
 
