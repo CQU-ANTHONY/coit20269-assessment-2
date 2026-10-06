@@ -185,6 +185,33 @@
     $btn.toggleClass("is-busy", !!busy).prop("disabled", !!busy);
   }
 
+  /** Show or hide the password behind an .input-reveal__toggle button. */
+  function setPasswordVisible($toggle, visible) {
+    var $input = $("#" + $toggle.attr("aria-controls"));
+    $input.attr("type", visible ? "text" : "password");
+    $toggle
+      .attr("aria-pressed", visible ? "true" : "false")
+      .attr("aria-label", visible ? "Hide password" : "Show password");
+    $toggle.find("use").attr("xlink:href", visible ? "#i-eye-off" : "#i-eye");
+  }
+
+  $(document).on("click", ".input-reveal__toggle", function () {
+    var $toggle = $(this);
+    setPasswordVisible($toggle, $toggle.attr("aria-pressed") !== "true");
+  });
+
+  // Never leave a password on screen once the form resets or the page closes.
+  function hidePasswords() {
+    $(this)
+      .find(".input-reveal__toggle")
+      .each(function () {
+        setPasswordVisible($(this), false);
+      });
+  }
+
+  $(document).on("reset", "form", hidePasswords);
+  $(document).on("pagehide", ".page-auth", hidePasswords);
+
   SS.escapeHtml = escapeHtml;
   SS.formatPrice = formatPrice;
   SS.categoryLabel = categoryLabel;

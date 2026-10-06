@@ -26,9 +26,15 @@
 
                 <div class="field">
                     <label for="signup-password">Password</label>
-                    <input type="password" name="password" id="signup-password" data-role="none" required
-                           autocomplete="new-password" minlength="8" placeholder="At least 8 characters"
-                           aria-describedby="signup-password-hint">
+                    <div class="input-reveal">
+                        <input type="password" name="password" id="signup-password" data-role="none" required
+                               autocomplete="new-password" minlength="8" placeholder="At least 8 characters"
+                               aria-describedby="signup-password-hint">
+                        <button type="button" data-role="none" class="input-reveal__toggle" aria-controls="signup-password"
+                                aria-label="Show password" aria-pressed="false">
+                            <svg class="icon" aria-hidden="true"><use xlink:href="#i-eye"></use></svg>
+                        </button>
+                    </div>
                     <p class="field__hint" id="signup-password-hint">Use 8 characters or more.</p>
                 </div>
 
