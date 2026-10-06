@@ -28,14 +28,16 @@ services:
       - /app/node_modules
     ports:
       - "${API_HOST_PORT:-3100}:3000"
+    env_file:
+      - ./server/.env
     environment:
       NODE_ENV: development
       PORT: 3000
-      # Inside the compose network the DB hostname is the service name.
-      # This intentionally overrides any MONGODB_URI from server/.env —
-      # in Docker we always talk to the compose mongodb service.
-      MONGODB_URI: mongodb://mongodb:27017/studyswap
-      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
+      # # Inside the compose network the DB hostname is the service name.
+      # # This intentionally overrides any MONGODB_URI from server/.env —
+      # # in Docker we always talk to the compose mongodb service.
+      # MONGODB_URI: ${MONGODB_URI:-mongodb://mongodb:27017/studyswap}
+      # JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
     depends_on:
       - mongodb
     restart: unless-stopped
