@@ -10,11 +10,18 @@ const router = express.Router();
 
 const CATEGORIES = ["textbooks", "furniture", "electronics", "other"];
 
+// Browse sort orders; createdAt breaks price ties so paging stays stable.
+const SORTS = {
+  newest: { createdAt: -1 },
+  price_asc: { price: 1, createdAt: -1 },
+  price_desc: { price: -1, createdAt: -1 },
+};
+
 function isValidObjectId(id) {
   return mongoose.Types.ObjectId.isValid(id);
 }
 
-// GET /api/listings — browse (public), filters: category, status, q, mine=1
+// GET /api/listings — browse (public), filters: category, status, q, mine=1, sort
 router.get("/", async (req, res, next) => {
   try {
     const query = {};
@@ -52,15 +59,16 @@ router.get("/", async (req, res, next) => {
     const mine = req.query.mine === "1";
     const limit = Math.min(parseInt(req.query.limit, 10) || 50, 100);
     const skip = Math.max(parseInt(req.query.skip, 10) || 0, 0);
+    const sort = SORTS[req.query.sort] || SORTS.newest;
 
-    let findQuery = Listing.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit);
+    let findQuery = Listing.find(query).sort(sort).skip(skip).limit(limit);
 
     if (mine) {
       // Authenticate lazily only when mine=1 (public browse stays public)
       return authenticate(req, res, async (err) => {
         if (err) return next(err);
         findQuery = Listing.find({ ...query, seller: req.user.id })
-          .sort({ createdAt: -1 })
+          .sort(sort)
           .skip(skip)
           .limit(limit);
         const listings = await findQuery;

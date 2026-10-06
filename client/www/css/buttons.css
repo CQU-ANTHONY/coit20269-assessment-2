@@ -76,6 +76,20 @@
   font-size: 13px;
 }
 
+/* Square, icon-only; pair with a size modifier and an aria-label. */
+.btn--icon {
+  width: 44px;
+  padding: 0;
+}
+
+.btn--sm.btn--icon {
+  width: 36px;
+}
+
+.btn--sm.btn--icon .icon {
+  font-size: 15px;
+}
+
 .btn--primary,
 .ui-page a.btn--primary,
 .ui-page a.btn--primary:visited {

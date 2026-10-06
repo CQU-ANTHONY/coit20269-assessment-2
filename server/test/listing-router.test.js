@@ -140,6 +140,52 @@ describe("GET /api/listings (browse)", () => {
   });
 });
 
+describe("GET /api/listings?sort", () => {
+  beforeAll(async () => {
+    for (const price of [120, 5]) {
+      await request(app)
+        .post("/api/listings")
+        .set("Authorization", `Bearer ${sellerToken}`)
+        .send({ ...validListing, title: `Sort item ${price}`, price });
+    }
+  });
+
+  const prices = (res) => res.body.data.listings.map((l) => l.price);
+
+  it("defaults to newest first", async () => {
+    const res = await request(app).get("/api/listings");
+    const created = res.body.data.listings.map((l) => new Date(l.createdAt).getTime());
+    expect(created).toEqual([...created].sort((a, b) => b - a));
+  });
+
+  it("sorts by price low to high", async () => {
+    const res = await request(app).get("/api/listings?sort=price_asc");
+    expect(res.status).toBe(200);
+    expect(prices(res)).toEqual([...prices(res)].sort((a, b) => a - b));
+  });
+
+  it("sorts by price high to low", async () => {
+    const res = await request(app).get("/api/listings?sort=price_desc");
+    expect(res.status).toBe(200);
+    expect(prices(res)).toEqual([...prices(res)].sort((a, b) => b - a));
+  });
+
+  it("combines sort with the category filter", async () => {
+    const res = await request(app).get("/api/listings?category=textbooks&sort=price_asc");
+    expect(res.body.data.listings.every((l) => l.category === "textbooks")).toBe(true);
+    expect(prices(res)).toEqual([...prices(res)].sort((a, b) => a - b));
+  });
+
+  it("falls back to newest for an unknown sort", async () => {
+    const res = await request(app).get("/api/listings?sort=bogus");
+    expect(res.status).toBe(200);
+  });
+
+  afterAll(async () => {
+    await Listing.deleteMany({ title: /^Sort item / });
+  });
+});
+
 describe("GET /api/listings/:id", () => {
   it("returns the listing detail (public)", async () => {
     const res = await request(app).get(`/api/listings/${listingId}`);
