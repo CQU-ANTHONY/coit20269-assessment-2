@@ -6,12 +6,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#11111b">
     <meta name="color-scheme" content="dark">
+    <!-- Painted before stylesheets and page fragments. Covers the moment jQM
+         inserts every page and the gap while one page replaces another. -->
+    <style>
+        html,
+        body {
+            background: #11111b;
+        }
+
+        html:not(.is-booted) [data-role="page"] {
+            display: none !important;
+        }
+
+        .boot {
+            position: fixed;
+            inset: 0;
+            z-index: 10000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #11111b;
+            visibility: visible !important;
+        }
+
+        html.is-booted:not(.is-changing) .boot {
+            display: none;
+        }
+
+        .boot__spinner {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(205, 214, 244, 0.18);
+            border-top-color: #cba6f7;
+            border-radius: 999px;
+            animation: boot-spin 0.7s linear infinite;
+        }
+
+        @keyframes boot-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .boot__spinner {
+                animation: none;
+                border-color: rgba(205, 214, 244, 0.18);
+                border-top-color: #cba6f7;
+                opacity: 0.85;
+            }
+        }
+    </style>
     <!-- Cordova: self + HTTPS API + camera data URLs / blobs. gap: for Cordova bridge. -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: content: https:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; media-src *;">
     <link rel="stylesheet" href="lib/css/jquery.mobile-1.4.5.min.css">
     <link rel="stylesheet" href="css/studyswap.css">
 </head>
 <body>
+
+<div id="boot" class="boot" role="status" aria-label="Loading StudySwap">
+    <span class="boot__spinner" aria-hidden="true"></span>
+</div>
 
 <!--
   Page markup lives in components/*.html and is mounted by js/boot.js before
@@ -26,8 +81,18 @@
     // page load events that conflict with Cordova. Keep defaults for browser.
     // Delay enhance until boot.js has injected page components.
     $(document).on('mobileinit', function () {
-        $.mobile.defaultPageTransition = 'fade';
+        // An instant swap under the boot veil. The fade left the outgoing
+        // page's text on screen while the next page came in.
+        $.mobile.defaultPageTransition = 'none';
+        $.mobile.defaultDialogTransition = 'none';
         $.mobile.autoInitializePage = false;
+        if ($.mobile.changePage && $.mobile.changePage.defaults) {
+            $.mobile.changePage.defaults.showLoadMsg = false;
+        }
+        if ($.mobile.loader && $.mobile.loader.prototype) {
+            $.mobile.loader.prototype.options.text = '';
+            $.mobile.loader.prototype.options.textVisible = false;
+        }
     });
 </script>
 <script src="lib/jquery.mobile-1.4.5.min.js"></script>

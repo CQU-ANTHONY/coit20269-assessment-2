@@ -15,6 +15,17 @@
   outline: none;
 }
 
+/* Inactive pages stay out of view. jQM only adds .ui-page (and display:none)
+   once a page is enhanced, so a not-yet-visited page can otherwise paint its
+   headings for a frame. The loader widget's h1 literally says "loading". */
+html.is-booted [data-role="page"]:not(.ui-page-active) {
+  display: none !important;
+}
+
+.ui-loader {
+  display: none !important;
+}
+
 .ui-content {
   padding: var(--s5) var(--s4) calc(var(--s8) + var(--tab-h) + var(--safe-b));
   margin: 0 auto;

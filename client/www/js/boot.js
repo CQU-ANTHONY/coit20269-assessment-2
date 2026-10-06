@@ -23,6 +23,46 @@
 
   var TABBAR_PATH = "components/partial-tabbar.html";
 
+  // Long enough that a page change reads as a loader, not a flicker of text.
+  var TRANSITION_VEIL_MS = 200;
+  var booted = false;
+  var veilShownAt = 0;
+  var veilTimer = null;
+
+  function showVeil() {
+    clearTimeout(veilTimer);
+    veilShownAt = performance.now();
+    document.documentElement.classList.add("is-changing");
+    document.documentElement.setAttribute("aria-busy", "true");
+  }
+
+  function hideVeil() {
+    clearTimeout(veilTimer);
+    var wait = booted ? Math.max(0, TRANSITION_VEIL_MS - (performance.now() - veilShownAt)) : 0;
+    veilTimer = setTimeout(function () {
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+          document.documentElement.classList.add("is-booted");
+          document.documentElement.classList.remove("is-changing");
+          document.documentElement.removeAttribute("aria-busy");
+          booted = true;
+        });
+      });
+    }, wait);
+  }
+
+  if (window.jQuery) {
+    // Cover the swap itself. The first page has no outgoing page, so the
+    // veil that was in the HTML stays up until pagecontainershow.
+    jQuery(document).on("pagecontainerbeforehide", function () {
+      if (booted) {
+        showVeil();
+      }
+    });
+    jQuery(document).on("pagecontainershow", hideVeil);
+    jQuery(document).on("pagecontainerchangefailed", hideVeil);
+  }
+
   function loadHtml(path) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
@@ -88,6 +128,9 @@
   boot().catch(function (err) {
     // Surface clearly — a blank shell means a missing fragment path.
     console.error("[StudySwap] boot failed:", err);
+    document.documentElement.classList.add("is-booted");
+    document.documentElement.classList.remove("is-changing");
+    document.documentElement.removeAttribute("aria-busy");
     document.body.insertAdjacentHTML(
       "afterbegin",
       '<p style="padding:1rem;font-family:sans-serif;color:#f38ba8">' +
