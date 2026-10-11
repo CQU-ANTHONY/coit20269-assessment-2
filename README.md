@@ -4,6 +4,13 @@ COIT20269 Assignment 2 — Mobile Apps Project (Group D)
 
 A three-tier mobile hybrid app for buying and selling second-hand items between students on campus.
 
+## Live deployment
+
+| | URL |
+|---|---|
+| Backend (API) | https://coit20269-assessment-2-bnzk.onrender.com |
+| Frontend | https://coit20269-assessment-2-1.onrender.com |
+
 ## Group D
 
 | Student ID | Name | Campus |
@@ -41,7 +48,7 @@ General-purpose marketplaces (Gumtree, Facebook Marketplace) and student sites (
 - **Client:** jQuery, jQuery Mobile, JavaScript, HTML5, CSS — packaged with Cordova (camera plugin for listing photos)
 - **Server:** Node.js 24, Express, Passport (local + JWT strategies), Mongoose, JWT auth, CORS middleware, HTTPS
 - **Database:** MongoDB Atlas
-- **Deployment:** Render (server), Cordova/Android (app)
+- **Deployment:** Render ([backend](https://coit20269-assessment-2-bnzk.onrender.com), [frontend](https://coit20269-assessment-2-1.onrender.com)), Cordova/Android (app)
 - **Version control:** GitHub
 
 Full package inventory (npm + Cordova + vendored libs): **[docs/packages.md](docs/packages.md)**.
